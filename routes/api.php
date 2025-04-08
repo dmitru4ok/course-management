@@ -1,11 +1,18 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use \App\Models\Course;
 
-Route::get('/course/{id?}', function (Request $request, ?int $id = null) {
-    $course=Course::find($id)->title;
-    return var_dump($course);
+Route::get('/courses', function () {
+    return Course::latest()->where('title', 'not ilike', '%operating%')->get('title');
+});
+
+Route::get('/courses/{id?}', function (?string $id) {
+    $course=Course::findOrFail($id)->title;
+    return $course;
 });
 // ->middleware('auth:sanctum');
+
+Route::fallback(function () {
+    return '404'; // no json for now
+});
