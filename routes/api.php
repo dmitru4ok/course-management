@@ -1,17 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use \App\Models\Course;
 use \App\Http\Controllers\FacultyController;
 
-Route::get('/courses', function () {
-    return Course::latest()->where('title', 'not ilike', '%operating%')->get('title');
-});
 
-Route::get('/courses/{id?}', function (?string $id) {
-    $course=Course::findOrFail($id)->title;
-    return $course;
-});
 // ->middleware('auth:sanctum');
 
 
