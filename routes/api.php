@@ -24,13 +24,14 @@ Route::controller(SemesterController::class)->group(function() {
 
 Route::controller(StudyProgramInstanceController::class)->group(function() {
     Route::get('/study_programs', 'index');
-    Route::get('/study_programs/{id}', 'show');
+    Route::get('/study_programs/{code}', 'show_by_code');
+    Route::get('/study_programs/year/{year}', 'show_by_year');
     Route::post('/study_programs', 'store');
-    Route::put('/study_programs/{id}', 'update');
+    Route::patch('/study_programs/{code}', 'update');
 });
 
 Route::fallback(function () {
-    return '404'; // no json for now
+    return response(["message" => "invalid endpoint"], 404);
 });
 
 

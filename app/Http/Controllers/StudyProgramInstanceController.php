@@ -7,34 +7,27 @@ use Illuminate\Http\Request;
 
 class StudyProgramInstanceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         return StudyProgramInstance::all();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         //
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show_by_code(string $code)
     {
-        //
+        return StudyProgramInstance::where('program_code', $code)->get();
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function show_by_year(int $year)
+    {
+        return StudyProgramInstance::where('year_started', $year)->get();
+    }
+
+    public function update(Request $request, string $code)
     {
         //
     }
