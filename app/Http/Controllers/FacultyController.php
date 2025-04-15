@@ -15,11 +15,7 @@ class FacultyController extends Controller
 
     public function store(FacultyRequest $request)
     {
-        $validated = $request->validate();
-        $faculty = new Faculty();
-        $faculty->faculty_code = $validated["faculty_code"];
-        $faculty->faculty_name = $validated["faculty_name"];
-        $faculty->save();
+        $faculty = Faculty::create($request->validated());
         return response()->json([
             "faculty_code" => $faculty->faculty_code
         ], 201);
@@ -37,11 +33,12 @@ class FacultyController extends Controller
         return response()->json($searched, 200);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(FacultyRequest $request, string $id)
+    public function update(FacultyRequest $request, string $code)
     {
-        //
-    }
+        $searched = Faculty::find($code);
+        $searched->update($request->validated());
+        return response()->json([
+            "message" => "Faculty with code $code updated"
+        ], 200);
+    } // TODO: validation fails here when editing existing object
 }

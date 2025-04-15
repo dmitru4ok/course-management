@@ -12,7 +12,7 @@ class StudyProgramInstanceController extends Controller
      */
     public function index()
     {
-        return StudyProgramInstance::all()->map(fn ($sp) => $sp->semester);
+        return StudyProgramInstance::all();
     }
 
     /**

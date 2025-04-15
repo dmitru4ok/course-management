@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\FacultyController;
 use App\Http\Controllers\SemesterController;
+use App\Http\Controllers\StudyProgramInstanceController;
 
 // ->middleware('auth:sanctum');
 
@@ -16,9 +17,16 @@ Route::controller(FacultyController::class)->group(function () {
 
 Route::controller(SemesterController::class)->group(function() {
     Route::get('/semesters', 'index');
-    Route::get('/semesters/{id}', 'show');
+    Route::get('/semesters/{program}/{year}', 'show');
     Route::post('/semesters', 'store');
-    Route::put('/semesters/{id}', 'update');
+    Route::put('/semesters/{program}/{year}', 'update');
+});
+
+Route::controller(StudyProgramInstanceController::class)->group(function() {
+    Route::get('/study_programs', 'index');
+    Route::get('/study_programs/{id}', 'show');
+    Route::post('/study_programs', 'store');
+    Route::put('/study_programs/{id}', 'update');
 });
 
 Route::fallback(function () {

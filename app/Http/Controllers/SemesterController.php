@@ -8,17 +8,11 @@ use Illuminate\Http\Request;
 
 class SemesterController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         return Semester::all();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         //
@@ -27,9 +21,10 @@ class SemesterController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $program, int $year)
     {
-        //
+        return Semester::where('program_code', $program)
+            ->where('year_started', $year)->get();
     }
 
     /**
