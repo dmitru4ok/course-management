@@ -20,6 +20,7 @@ class StudyProgramInstance extends Model
     ];
 
     public function semester(): HasMany {
-        return $this->hasMany(Semester::class, "program_code", "program_code");
+        return $this->hasMany(Semester::class, "program_code", "program_code")
+            ->where("year_started", $this->year_started); // PK is composite: program_code + year_started
     }
 }
