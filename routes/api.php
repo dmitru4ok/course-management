@@ -12,7 +12,7 @@ Route::controller(FacultyController::class)->group(function () {
     Route::get('/faculties', 'index');
     Route::get('/faculties/{code}', 'show');
     Route::post('/faculties', 'store');
-    Route::put('/faculties/{code}', 'update');
+    Route::patch('/faculties/{code}', 'update');
 });
 
 Route::controller(SemesterController::class)->group(function() {

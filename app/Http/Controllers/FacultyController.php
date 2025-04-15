@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\FacultyRequest;
 use App\Models\Faculty;
+use Illuminate\Http\Request;
 
 
 class FacultyController extends Controller
@@ -33,12 +34,18 @@ class FacultyController extends Controller
         return response()->json($searched, 200);
     }
 
-    public function update(FacultyRequest $request, string $code)
+    public function update(Request $request, string $code)
     {
         $searched = Faculty::find($code);
-        $searched->update($request->validated());
-        return response()->json([
-            "message" => "Faculty with code $code updated"
-        ], 200);
-    } // TODO: validation fails here when editing existing object
+        if (is_null($searched)) {
+            return response()->json([
+                "message" => "Faculty with code $code not found"
+            ], 404);
+        }
+
+        $request->validate(["faculty_name" => "required|string|max:100"]);
+        $searched->faculty_name = $request->faculty_name;
+        $searched->save();
+        return response()->json($searched, 200);
+    }
 }
