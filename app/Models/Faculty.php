@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Faculty extends Model
 {
@@ -16,4 +17,8 @@ class Faculty extends Model
         "faculty_code",
         "faculty_name"
     ];
+
+    public function studyPrograms(): HasMany {
+        return $this->hasMany(StudyProgramInstance::class, "faculty_code", "faculty_code");
+    }
 }
