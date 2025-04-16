@@ -21,4 +21,8 @@ class Faculty extends Model
     public function studyPrograms(): HasMany {
         return $this->hasMany(StudyProgramInstance::class, "faculty_code", "faculty_code");
     }
+
+    public function courseBlueprints(): HasMany {
+        return $this->hasMany(CourseBlueprint::class, "faculty_code", "faculty_code");
+    }
 }
