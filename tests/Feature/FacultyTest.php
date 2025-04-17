@@ -216,4 +216,92 @@ class FacultyTest extends TestCase
         ]);
         $response->assertJsonPath("message", "The faculty name field must not be greater than 100 characters.");
     }
+
+    public function test_patchFaculties_NonExistingFacultyCode_error404Caught(): void
+    {
+        $faculty_code_to_modify_non_existing = 'FIF';
+        $response = $this->patchJson('/faculties/'.$faculty_code_to_modify_non_existing,
+            [
+                "faculty_name" => "New faculty name"
+            ]
+        );
+
+        $response->assertStatus(404);
+        $response->assertExactJson([
+            'message' => "Faculty with code $faculty_code_to_modify_non_existing not found.",
+        ]);
+    }
+
+    public function test_patchFaculties_emptyFacultyCode_error405Caught(): void
+    {
+        $faculty_code_to_modify_non_existing = '';
+        $response = $this->patchJson('/faculties/'.$faculty_code_to_modify_non_existing,
+            [
+                "faculty_name" => "New faculty name"
+            ]
+        );
+
+        $response->assertStatus(405); //method not allowed
+    }
+
+    public function test_patchFaculties_EmptyStringName_error422Caught(): void
+    {
+        $faculty_code_to_modify = 'FIZ';
+        $new_faculty_name = "";
+        $response = $this->patchJson('/faculties/'.$faculty_code_to_modify,
+            [
+                "faculty_name" => $new_faculty_name
+            ]
+        );
+
+        $response->assertStatus(422);
+        $response->assertJsonStructure([
+            'message',
+            'errors' => [
+                'faculty_name' => []
+            ]
+        ]);
+        $response->assertJsonPath("message", "The faculty name field is required.");
+    }
+
+    public function test_patchFaculties_NonStringName_error422Caught(): void
+    {
+        $faculty_code_to_modify = 'FIZ';
+        $new_faculty_name = 41414;
+        $response = $this->patchJson('/faculties/'.$faculty_code_to_modify,
+            [
+                "faculty_name" => $new_faculty_name
+            ]
+        );
+
+        $response->assertStatus(422);
+        $response->assertJsonStructure([
+            'message',
+            'errors' => [
+                'faculty_name' => []
+            ]
+        ]);
+        $response->assertJsonPath("message", "The faculty name field must be a string.");
+    }
+
+    public function test_patchFaculties_TooLongName_error422Caught(): void
+    {
+        $faculty_code_to_modify = 'FIZ';
+        $too_long_new_faculty_name = "Faculty of Mathematics and Computer ScienceFaculty of Mathematics and Computer ScienceFaculty of Math";
+        $this->assertTrue(strlen($too_long_new_faculty_name) === 101);
+        $response = $this->patchJson('/faculties/'.$faculty_code_to_modify,
+            [
+                "faculty_name" => $too_long_new_faculty_name
+            ]
+        );
+
+        $response->assertStatus(422);
+        $response->assertJsonStructure([
+            'message',
+            'errors' => [
+                'faculty_name' => []
+            ]
+        ]);
+        $response->assertJsonPath("message", "The faculty name field must not be greater than 100 characters.");
+    }
 }
