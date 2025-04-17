@@ -138,4 +138,82 @@ class FacultyTest extends TestCase
         ]);
         $response->assertJsonPath("message", "The faculty code has already been taken.");
     }
+
+    public function test_postFaculties_codeIsANumber_error422Caught(): void
+    {
+        $response = $this->postJson('/faculties',
+            [
+                "faculty_code" => 333,
+                "faculty_name" => "imaginary faculty"
+            ]
+        );
+
+        $response->assertStatus(422);
+        $response->assertJsonStructure([
+            'message',
+            'errors' => [
+                'faculty_code' => []
+            ]
+        ]);
+        $response->assertJsonPath("message", "The faculty code field must be a string.");
+    }
+
+    public function test_postFaculties_nameEmpty_error422Caught(): void
+    {
+        $response = $this->postJson('/faculties',
+            [
+                "faculty_code" => "FIR",
+                "faculty_name" => ""
+            ]
+        );
+
+        $response->assertStatus(422);
+        $response->assertJsonStructure([
+            'message',
+            'errors' => [
+                'faculty_name' => []
+            ]
+        ]);
+        $response->assertJsonPath("message", "The faculty name field is required.");
+    }
+
+    public function test_postFaculties_nameIsANumber_error422Caught(): void
+    {
+        $response = $this->postJson('/faculties',
+            [
+                "faculty_code" => "FIR",
+                "faculty_name" => 333
+            ]
+        );
+
+        $response->assertStatus(422);
+        $response->assertJsonStructure([
+            'message',
+            'errors' => [
+                'faculty_name' => []
+            ]
+        ]);
+        $response->assertJsonPath("message", "The faculty name field must be a string.");
+    }
+
+    public function test_postFaculties_nameIsTooLong_error422Caught(): void
+    {
+        $too_long_faculty_name = "Faculty of Mathematics and Computer ScienceFaculty of Mathematics and Computer ScienceFaculty of Math";
+        $this->assertTrue(strlen($too_long_faculty_name) === 101);
+        $response = $this->postJson('/faculties',
+            [
+                "faculty_code" => "FIR",
+                "faculty_name" => $too_long_faculty_name
+            ]
+        );
+
+        $response->assertStatus(422);
+        $response->assertJsonStructure([
+            'message',
+            'errors' => [
+                'faculty_name' => []
+            ]
+        ]);
+        $response->assertJsonPath("message", "The faculty name field must not be greater than 100 characters.");
+    }
 }
