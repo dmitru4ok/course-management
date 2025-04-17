@@ -3,19 +3,25 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class FacultyTest extends TestCase
 {
-    // use RefreshDatabase;
+    use RefreshDatabase;
     // test naming convention: test_{name of function/route args(or their absence)}_{anticipated result}
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seed();
+    }
 
     // retrieving faculties
     public function test_getFaculties_noArgs_allFaculties(): void
     {
-        $response = $this->get('/faculties');
-        $response->assertStatus(200);
+        $response = $this->get('/faculties'); // Act
+
+        $response->assertStatus(200); // Assert
         $response->assertJsonIsArray();
         $response->assertJsonStructure([
             '*' => [
@@ -28,8 +34,10 @@ class FacultyTest extends TestCase
     public function test_getFaculties_routeWithID_oneFaculty(): void
     {
         $facultyCode='FIZ';
-        $response = $this->get('/faculties/'.$facultyCode);
-        $response->assertStatus(200);
+        
+        $response = $this->get('/faculties/'.$facultyCode); // Act
+
+        $response->assertStatus(200); // Assert
         $response->assertJsonIsObject();
         $response->assertJsonStructure([
             'faculty_code',
