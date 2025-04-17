@@ -39,13 +39,13 @@ class FacultyController extends Controller
         $searched = Faculty::find($code);
         if (is_null($searched)) {
             return response()->json([
-                "message" => "Faculty with code $code not found"
+                "message" => "Faculty with code $code not found."
             ], 404);
         }
 
         $request->validate(["faculty_name" => "required|string|max:100"]);
         $searched->faculty_name = $request->faculty_name;
         $searched->save();
-        return response()->json($searched, 200);
+        return response()->json($searched, 201);
     }
 }
