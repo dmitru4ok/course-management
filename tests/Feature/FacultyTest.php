@@ -10,12 +10,6 @@ class FacultyTest extends TestCase
     use RefreshDatabase;
     // test naming convention: test_{name of function/route args(or their absence)}_{anticipated result}
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->seed();
-    }
-
     // retrieving faculties
     public function test_getFaculties_noArgs_allFaculties(): void
     {
