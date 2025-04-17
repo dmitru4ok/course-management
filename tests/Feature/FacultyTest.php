@@ -42,4 +42,100 @@ class FacultyTest extends TestCase
             'faculty_name' => 'Faculty of Physics'
         ]);
     }
+
+    public function test_postFaculties_newValid_validPost(): void
+    {
+        $code_to_add = 'VBS';
+        $name_to_add = 'VU Busines School';
+        $response = $this->postJson('/faculties',
+            [
+                'faculty_code' => $code_to_add,
+                'faculty_name' => $name_to_add
+            ]
+        );
+
+        $response->assertStatus(201);
+        $response->assertJsonIsObject();
+        $response->assertExactJson(["faculty_code" => $code_to_add]);
+        $this->assertDatabaseHas('faculties', [
+            'faculty_code' => $code_to_add,
+            'faculty_name' => $name_to_add
+        ]);
+    }
+
+    public function test_postFaculties_invalidTooShortCode_error422Caught(): void
+    {
+        $response = $this->postJson('/faculties',
+            [
+                "faculty_code" => "VF",
+                "faculty_name" => "imaginary faculty"
+            ]
+        );
+
+        $response->assertStatus(422);
+        $response->assertJsonStructure([
+            'message',
+            'errors' => [
+                'faculty_code' => []
+            ]
+        ]);
+    }
+
+    public function test_postFaculties_invalidTooLongCode_error422Caught(): void
+    {
+        $response = $this->postJson('/faculties',
+            [
+                "faculty_code" => "VFF1",
+                "faculty_name" => "imaginary faculty"
+            ]
+        );
+
+        $response->assertStatus(422);
+        $response->assertJsonStructure([
+            'message',
+            'errors' => [
+                'faculty_code' => []
+            ]
+        ]);
+
+        $response->assertJsonPath("message", "The faculty code field must be 3 characters.");
+    }
+
+    public function test_postFaculties_invalidEmptyCode_error422Caught(): void
+    {
+        $response = $this->postJson('/faculties',
+            [
+                "faculty_code" => "",
+                "faculty_name" => "imaginary faculty"
+            ]
+        );
+
+        $response->assertStatus(422);
+        $response->assertJsonStructure([
+            'message',
+            'errors' => [
+                'faculty_code' => []
+            ]
+        ]);
+        $response->assertJsonPath("message", "The faculty code field is required.");
+    }
+
+    public function test_postFaculties_invalidTakenCode_error422Caught(): void
+    {
+        $response = $this->postJson('/faculties',
+            [
+                "faculty_code" => "MIF",
+                "faculty_name" => "imaginary faculty"
+            ]
+        );
+
+        $response->assertStatus(422);
+        $response->assertJsonStructure([
+            'message',
+            'errors' => [
+                'faculty_code' => []
+            ]
+        ]);
+        $response->assertJsonPath("message", "The faculty code has already been taken.");
+    }
 }
