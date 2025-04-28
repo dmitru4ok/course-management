@@ -14,9 +14,7 @@ class StudyProgramInstance extends Model
     protected $fillable = [
         'program_code',
         'year_started',
-        'program_name',
-        'program_type',
-        'faculty_code'
+        'is_active'
     ];
 
     public function semester(): HasMany {
