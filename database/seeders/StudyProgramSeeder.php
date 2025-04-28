@@ -12,35 +12,31 @@ class StudyProgramSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('study_program_instances')->insert([
+        DB::table('study_programs')->insert([
             [
-                'year_started' => 2023,
                 'program_code' => 'BX0012',
                 'program_name' => 'Information Technology',
                 'program_type' => 'B',
                 'faculty_code' => 'MIF'
             ],
             [
-                'year_started' => 2024,
-                'program_code' => 'BX0012',
-                'program_name' => 'Information Technology',
-                'program_type' => 'B',
+                'program_code' => 'SGM016',
+                'program_name' => 'Cybersecurity',
+                'program_type' => 'M',
                 'faculty_code' => 'MIF'
             ],
             [
-                'year_started' => 2023,
                 'program_code' => 'MDCX02',
                 'program_name' => 'Medicine',
                 'program_type' => 'M',
                 'faculty_code' => 'MDC'
             ],
             [
-                'year_started' => 2024,
                 'program_code' => 'MDCX07',
                 'program_name' => 'Dentistry',
                 'program_type' => 'M',
                 'faculty_code' => 'MDC'
             ],
-        ]);
+        ]); 
     }
 }

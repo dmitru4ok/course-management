@@ -2,7 +2,7 @@
 
 **Faculty**(<ins>faculty_code</ins>, faculty_name)
 
-**StudyProgram**(<ins>program_code</ins>, program_name, program_type, program_type, *faculty_code*)
+**StudyProgram**(<ins>program_code</ins>, program_name, program_type, is_valid, *faculty_code*)
 
 **StudyProgramInstance**(<ins>year_started, *program_code*</ins>, is_active)
 
