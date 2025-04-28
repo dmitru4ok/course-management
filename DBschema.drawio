@@ -500,6 +500,7 @@
                         <mxPoint x="-10" y="21" as="offset"/>
                     </mxGeometry>
                 </mxCell>
+
                 <mxCell id="9" value="StudyProgramInstance" style="shape=ext;margin=3;double=1;whiteSpace=wrap;html=1;align=center;labelBackgroundColor=none;fillColor=#FAD9D5;strokeColor=#D0CEE2;fontColor=#1A1A1A;" parent="1" vertex="1">
                     <mxGeometry x="285" y="195" width="130" height="40" as="geometry"/>
                 </mxCell>
@@ -510,6 +511,7 @@
                     <mxGeometry x="370" y="490" width="125" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="13" value="" style="endArrow=none;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;labelBackgroundColor=none;fontColor=default;strokeColor=#09555B;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="Cuksicx7Q6Ttsj1FzyHK-73" target="12" edge="1">
+                
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="349.33" y="450" as="sourcePoint"/>
                         <mxPoint x="349" y="520" as="targetPoint"/>
