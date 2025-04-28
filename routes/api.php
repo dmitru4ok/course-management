@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\FacultyController;
 use App\Http\Controllers\SemesterController;
-use App\Http\Controllers\StudyProgramInstanceController;
+use App\Http\Controllers\StudyProgramController;
 
 // ->middleware('auth:sanctum');
 
@@ -22,10 +22,15 @@ Route::controller(SemesterController::class)->group(function() {
     Route::put('/semesters/{program}/{year}', 'update');
 });
 
-Route::controller(StudyProgramInstanceController::class)->group(function() {
+Route::controller(StudyProgramController::class)->group(function() {
     Route::get('/study_programs', 'index');
-    Route::get('/study_programs/{code}', 'show_by_code');
-    Route::get('/study_programs/year/{year}', 'show_by_year');
+    Route::get('/study_programs/instances', 'index_instances');
+    Route::get('/study_programs/{code}', 'show_study_program_by_id');
+    Route::get('/study_programs/{code}/instances', 'show_by_code_instances');
+    Route::get('/study_programs/instances/{year}', 'show_instances_by_year');
+    
+   
+    Route::get('/study_programs/{code}/instances/{year}', 'show_specific');
     Route::post('/study_programs', 'store');
     Route::patch('/study_programs/{code}', 'update');
 });
