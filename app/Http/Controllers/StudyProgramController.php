@@ -45,6 +45,19 @@ class StudyProgramController extends Controller
         return StudyProgram::create($data);
     }
 
+    public function create_study_program_instance(StudyProgramRequest $request) {
+        $data = $request->validated();
+        $new_instance = StudyProgramInstance::create($data);
+        if ($data['perform_deep_copy']) {
+            // TODO
+            // get semesters
+            // for each semester get compulsory courses
+            // instert semesters and their courses for the new instance
+        }
+       
+        return $new_instance;
+    }
+
     public function update(Request $request, string $code)
     {
         //
