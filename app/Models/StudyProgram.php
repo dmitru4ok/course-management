@@ -14,7 +14,8 @@ class StudyProgram extends Model
         'program_code',
         'program_name',
         'program_type',
-        'faculty_code'
+        'faculty_code',
+        'is_valid'
     ];
 
     function instances() {

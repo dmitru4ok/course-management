@@ -28,10 +28,13 @@ Route::controller(StudyProgramController::class)->group(function() {
     Route::get('/study_programs/{code}', 'show_study_program_by_id');
     Route::get('/study_programs/{code}/instances', 'show_by_code_instances');
     Route::get('/study_programs/instances/{year}', 'show_instances_by_year');
-    
-   
     Route::get('/study_programs/{code}/instances/{year}', 'show_specific');
-    Route::post('/study_programs', 'store');
+
+    Route::post('/study_programs', 'create_study_program');
+    Route::post('/study_programs/instances', 'create_study_program_instance');
+
+    Route::delete('/study_programs/{code}', 'devalidate_program');
+   
     Route::patch('/study_programs/{code}', 'update');
 });
 
