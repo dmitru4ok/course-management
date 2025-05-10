@@ -6,7 +6,7 @@ use \App\Http\Controllers\FacultyController;
 use App\Http\Controllers\SemesterController;
 use App\Http\Controllers\StudyProgramController;
 
-Route::withoutMiddleware(['auth:api', 'role'])->post('/login', [AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'login']);
 
 
 Route::middleware('auth:api')->group(function() {
@@ -21,7 +21,7 @@ Route::middleware('auth:api')->group(function() {
         Route::get('/faculties', 'index');
         Route::get('/faculties/{code}', 'show');
         Route::middleware('role:A')->post('/faculties', 'store');
-        Route::middleware('role:A')->patch('/faculties/{code}', 'update');
+        Route::patch('/faculties/{code}', 'update')->middleware('role:A');
     });
 
     Route::controller(SemesterController::class)->group(function() {
