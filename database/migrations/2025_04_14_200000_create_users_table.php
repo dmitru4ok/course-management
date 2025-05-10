@@ -18,8 +18,11 @@ return new class extends Migration
             $table->string('surname', 100);
             $table->string('email')->unique();
             $table->string('password');
-        });
+            $table->year('year_started')->nullable();
+            $table->char('program_code', 6)->nullable();
 
+            $table->foreign(['program_code', 'year_started'])->references(['program_code', 'year_started'])->on('study_program_instances')->onDelete('cascade');
+        });
         Illuminate\Support\Facades\DB::statement( "ALTER TABLE users ADD CONSTRAINT chk_role CHECK (role IN ('S', 'P', 'A'))");
     }
 

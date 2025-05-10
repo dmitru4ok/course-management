@@ -3,7 +3,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -21,18 +22,32 @@ class AuthController extends Controller
     }
 
     public function register(Request $request) {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'role' => 'required|string|size:1|in:S,P,A',
             'email' => 'required|email|unique:users,email|max:255',
             'name' => 'required|string|max:100',
             'surname' => 'required|string|max:100',
-            'password' => 'required|string|min:8'
+            'password' => 'required|string|min:8',
         ]);
+    
+        $validator->sometimes('year_started', [
+            'integer',
+            'digits:4',
+            'max:' . now()->year
+        ], fn ($input) => $input->role === 'S');
+    
+        $validator->sometimes('program_code', [
+            'string',
+            'size:6',
+            Rule::exists('study_program_instances', 'program_code')->where(function ($query) use ($request) {
+                $query->where('year_started', $request->year_started);
+            })
+        ], fn($input) => $input->role === 'S');
 
-        return response(User::create($validated), 201);
+        return response(User::create($validator->validate()), 201);
     }
 
-    public function whoami(Request $request) {
-        return $request->user();
+    public function whoami() {
+        return auth('api')->user();
     }
 }
