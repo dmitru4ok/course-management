@@ -17,7 +17,7 @@ class FacultyTest extends TestCase
 
         $response->assertStatus(200); // Assert
         $response->assertJsonIsArray();
-        $response->assertJsonStructure([
+        $response->assertExactJsonStructure([
             '*' => [
                 'faculty_code',
                 'faculty_name'
@@ -33,7 +33,7 @@ class FacultyTest extends TestCase
 
         $response->assertStatus(200); // Assert
         $response->assertJsonIsObject();
-        $response->assertJsonStructure([
+        $response->assertExactJsonStructure([
             'faculty_code',
             'faculty_name'
         ]);
@@ -73,10 +73,10 @@ class FacultyTest extends TestCase
         );
 
         $response->assertStatus(422);
-        $response->assertJsonStructure([
+        $response->assertExactJsonStructure([
             'message',
             'errors' => [
-                'faculty_code' => []
+                'faculty_code'
             ]
         ]);
     }
@@ -91,10 +91,10 @@ class FacultyTest extends TestCase
         );
 
         $response->assertStatus(422);
-        $response->assertJsonStructure([
+        $response->assertExactJsonStructure([
             'message',
             'errors' => [
-                'faculty_code' => []
+                'faculty_code' 
             ]
         ]);
 
@@ -111,10 +111,10 @@ class FacultyTest extends TestCase
         );
 
         $response->assertStatus(422);
-        $response->assertJsonStructure([
+        $response->assertExactJsonStructure([
             'message',
             'errors' => [
-                'faculty_code' => []
+                'faculty_code'
             ]
         ]);
         $response->assertJsonPath("message", "The faculty code field is required.");
