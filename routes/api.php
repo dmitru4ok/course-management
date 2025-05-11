@@ -18,9 +18,9 @@ Route::middleware('auth:api')->group(function() {
     });
 
     Route::controller(FacultyController::class)->group(function () {
-        Route::get('/faculties', 'index');
+        Route::get('/faculties', 'index')->middleware('role:A|P');
         Route::get('/faculties/{code}', 'show');
-        Route::middleware('role:A')->post('/faculties', 'store');
+        Route::post('/faculties', 'store')->middleware('role:A');
         Route::patch('/faculties/{code}', 'update')->middleware('role:A');
     });
 

@@ -11,7 +11,7 @@ class StudyProgramTest extends TestCase
     // test naming convention: test_{name of function/route args(or their absence)}_{anticipated result}
     public function test_getStudyPrograms_noArgs_allStudyPrograms(): void
     {
-        $response = $this->get('/study_programs');
+        $response = $this->getJson('/study_programs');
 
         $response->assertStatus(200);
         $response->assertJsonIsArray();

@@ -18,6 +18,6 @@ class RoleMiddleware
         if (in_array(auth('api')->user()->role,explode('|', $role))) {
             return $next($request);
         }
-        return response(['message'=> 'No privilege to access this resource'], 403);
+        return response(['message' => 'No privilege to access this resource'], 403);
     }
 }
