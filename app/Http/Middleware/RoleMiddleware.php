@@ -15,7 +15,7 @@ class RoleMiddleware
      */
     public function handle(Request $request, Closure $next, string $role): Response
     {
-        if (in_array(auth('api')->user()->role,explode('|', $role))) {
+        if (in_array(auth('api')->user()->role, explode('|', $role))) {
             return $next($request);
         }
         return response(['message' => 'No privilege to access this resource'], 403);

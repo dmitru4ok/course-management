@@ -12,7 +12,6 @@ abstract class TestCase extends BaseTestCase
 
     public function asUserRole(string $role) {
         $user = User::factory()->create(['role' => $role]);
-
         $token = JWTAuth::fromUser($user);
         return $this->withHeader('Authorization', 'Bearer '.$token);
     }
