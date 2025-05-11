@@ -67,4 +67,8 @@ class AuthController extends Controller
     {
         return auth('api')->logout();
     }
+
+    public function user_study_program() {
+        return User::find(auth('api')->user()->user_id)->studyProgram();
+    }
 }

@@ -36,8 +36,11 @@ class User extends Authenticatable implements JWTSubject
     }
 
     public function studyProgram() {
-        return StudyProgramInstance::query()
-            ->where('program_code', $this->program_code)
-            ->where('year_started', $this->year_started)->first();
+        return StudyProgram::query()
+            ->where('program_code', $this->program_code)->first();
     }
+
+    // public function studyProgramInstance() {
+    //     return $this->studyProgram()->instances();
+    // }
 }

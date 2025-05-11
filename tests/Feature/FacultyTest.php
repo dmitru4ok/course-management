@@ -44,10 +44,13 @@ class FacultyTest extends TestCase
     {
         $response = $this->asUserRole('S')->getJson('/faculties'); // Act
 
-        $response->assertStatus(403); // Assert
-        $response->assertJsonIsObject();
-        $response->assertExactJson([
-            'message' => 'No privilege to access this resource'
+        $response->assertStatus(200); // Assert
+        $response->assertJsonIsArray();
+        $response->assertExactJsonStructure([
+            '*' => [
+                'faculty_code',
+                'faculty_name'
+            ]
         ]);
     }
 
