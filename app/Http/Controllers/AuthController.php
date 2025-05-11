@@ -50,4 +50,21 @@ class AuthController extends Controller
     public function whoami() {
         return auth('api')->user();
     }
+
+    public function refresh() {
+        $old_invalid_token = (string)auth('api')->getToken();
+        $newtoken = auth('api')->refresh();
+
+        return response()->json([
+            'access_token' => $newtoken,
+            'old_invalid_token' => $old_invalid_token,
+            'expires_in' => auth('api')->factory()->getTTL() * 60,
+            'user' => auth('api')->user(),
+        ]);
+    }
+
+    public function logout() 
+    {
+        return auth('api')->logout();
+    }
 }

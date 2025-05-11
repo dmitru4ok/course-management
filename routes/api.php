@@ -14,7 +14,8 @@ Route::middleware('auth:api')->group(function() {
     Route::controller(AuthController::class)->group(function() { // tested
         Route::post('/register', 'register')->middleware('role:A');
         Route::get('/me', 'whoami');
-        Route::get('/refresh', 'refresh');
+        Route::post('/refresh', 'refresh');
+        Route::post('/logout', 'logout');
     });
 
     Route::controller(FacultyController::class)->group(function () { // tested
