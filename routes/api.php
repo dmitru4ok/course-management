@@ -11,13 +11,13 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:api')->group(function() {
 
-    Route::controller(AuthController::class)->group(function() {
+    Route::controller(AuthController::class)->group(function() { // tested
         Route::post('/register', 'register')->middleware('role:A');
         Route::get('/me', 'whoami');
         Route::get('/refresh', 'refresh');
     });
 
-    Route::controller(FacultyController::class)->group(function () {
+    Route::controller(FacultyController::class)->group(function () { // tested
         Route::get('/faculties', 'index')->middleware('role:A|P');
         Route::get('/faculties/{code}', 'show');
         Route::post('/faculties', 'store')->middleware('role:A');

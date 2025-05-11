@@ -4,14 +4,12 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use Illuminate\Support\Facades\Route;
-use Tymon\JWTAuth\Facades\JWTAuth;
-use App\Models\User;
-
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 // test naming convention: test_{name of function/route args(or their absence)}_{anticipated result}
 class RoleAuthTest extends TestCase
 {
-
+    use RefreshDatabase;
     const path = '/fake_route';
 
     public function test_NoAuthentinticationReuired_NoRolesAccess_Success() {
