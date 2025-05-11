@@ -192,4 +192,186 @@ class AuthEndpointsTest extends TestCase
             'year_started' => null
         ]);
     }
+
+    public function test_registerAuthenticatedAsAdmin_Create_S_nameEmpty_FailNameRequired() {
+        $study_pr_year_to_insert_with = 2023;
+        $study_pr_code_to_insert_with = 'BX0012';
+        $this->assertDatabaseHas('study_program_instances', [
+            'program_code' => $study_pr_code_to_insert_with,
+            'year_started' => $study_pr_year_to_insert_with
+        ]);
+
+        $this->assertDatabaseMissing('users', ['email' => 'example@example.com', 'role' => 'S']);
+        $response = $this->asUserRole('A')->postJson('/register', [
+            'name' => '',
+            'surname' => 'Doe',
+            'email' => 'example@example.com',
+            'role' => 'S',
+            'year_started' => $study_pr_year_to_insert_with,
+            'program_code' => $study_pr_code_to_insert_with,
+            'password' => 'blabla1234'
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJsonIsObject();
+        $response->assertJsonPath('message', 'The name field is required.');
+
+        $this->assertDatabaseMissing('users', ['email' => 'example@example.com', 'role' => 'S']);
+    }
+
+    public function test_registerAuthenticatedAsAdmin_Create_S_surnameEmpty_FailNameRequired() {
+        $study_pr_year_to_insert_with = 2023;
+        $study_pr_code_to_insert_with = 'BX0012';
+        $this->assertDatabaseHas('study_program_instances', [
+            'program_code' => $study_pr_code_to_insert_with,
+            'year_started' => $study_pr_year_to_insert_with
+        ]);
+
+        $this->assertDatabaseMissing('users', ['email' => 'example@example.com', 'role' => 'S']);
+        $response = $this->asUserRole('A')->postJson('/register', [
+            'name' => 'John',
+            'surname' => '',
+            'email' => 'example@example.com',
+            'role' => 'S',
+            'year_started' => $study_pr_year_to_insert_with,
+            'program_code' => $study_pr_code_to_insert_with,
+            'password' => 'blabla1234'
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJsonIsObject();
+        $response->assertJsonPath('message', 'The surname field is required.');
+
+        $this->assertDatabaseMissing('users', ['email' => 'example@example.com', 'role' => 'S']);
+    }
+
+    public function test_registerAuthenticatedAsAdmin_Create_A_emailTaken_FailNameRequired() {
+        $study_pr_year_to_insert_with = 2023;
+        $study_pr_code_to_insert_with = 'BX0012';
+        $this->assertDatabaseHas('study_program_instances', [
+            'program_code' => $study_pr_code_to_insert_with,
+            'year_started' => $study_pr_year_to_insert_with
+        ]);
+
+        $this->assertDatabaseHas('users', ['email' => env('ADMIN_ONE_EMAIL'), 'role' => 'A']);
+        $response = $this->asUserRole('A')->postJson('/register', [
+            'name' => 'John',
+            'surname' => 'Doe',
+            'email' => env('ADMIN_ONE_EMAIL'),
+            'role' => 'A',
+            'year_started' => $study_pr_year_to_insert_with,
+            'program_code' => $study_pr_code_to_insert_with,
+            'password' => 'blabla1234'
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJsonIsObject();
+        $response->assertJsonPath('message', 'The email has already been taken.');
+
+        $this->assertDatabaseHas('users', ['email' => env('ADMIN_ONE_EMAIL'), 'role' => 'A']);
+    }
+
+    public function test_registerAuthenticatedAsAdmin_Create_S_emailBad_FailNameRequired() {
+        $study_pr_year_to_insert_with = 2023;
+        $study_pr_code_to_insert_with = 'BX0012';
+        $this->assertDatabaseHas('study_program_instances', [
+            'program_code' => $study_pr_code_to_insert_with,
+            'year_started' => $study_pr_year_to_insert_with
+        ]);
+        $badEmail = 'example@';
+        $this->assertDatabaseMissing('users', ['email' => $badEmail, 'role' => 'S']);
+        $response = $this->asUserRole('A')->postJson('/register', [
+            'name' => 'John',
+            'surname' => 'Doe',
+            'email' => $badEmail,
+            'role' => 'S',
+            'year_started' => $study_pr_year_to_insert_with,
+            'program_code' => $study_pr_code_to_insert_with,
+            'password' => 'blabla1234'
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJsonIsObject();
+        $response->assertJsonPath('message', 'The email field must be a valid email address.');
+
+        $this->assertDatabaseMissing('users', ['email' => $badEmail, 'role' => 'S']);
+    }
+
+    public function test_registerAuthenticatedAsAdmin_Create_S_roleBad_FailNameRequired() {
+        $study_pr_year_to_insert_with = 2023;
+        $study_pr_code_to_insert_with = 'BX0012';
+        $this->assertDatabaseHas('study_program_instances', [
+            'program_code' => $study_pr_code_to_insert_with,
+            'year_started' => $study_pr_year_to_insert_with
+        ]);
+
+        $this->assertDatabaseMissing('users', ['email' => 'example@example.com', 'role' => 'S']);
+        $response = $this->asUserRole('A')->postJson('/register', [
+            'name' => 'John',
+            'surname' => 'Doe',
+            'email' => 'example@example.com',
+            'role' => 'Q',
+            'year_started' => $study_pr_year_to_insert_with,
+            'program_code' => $study_pr_code_to_insert_with,
+            'password' => 'blabla1234'
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJsonIsObject();
+        $response->assertJsonPath('message', 'The selected role is invalid.');
+
+        $this->assertDatabaseMissing('users', ['email' => 'example@example.com', 'role' => 'S']);
+    }
+
+    public function test_registerAuthenticatedAsAdmin_Create_S_passwordTooShort_FailNameRequired() {
+        $study_pr_year_to_insert_with = 2023;
+        $study_pr_code_to_insert_with = 'BX0012';
+        $this->assertDatabaseHas('study_program_instances', [
+            'program_code' => $study_pr_code_to_insert_with,
+            'year_started' => $study_pr_year_to_insert_with
+        ]);
+
+        $this->assertDatabaseMissing('users', ['email' => 'example@example.com', 'role' => 'S']);
+        $response = $this->asUserRole('A')->postJson('/register', [
+            'name' => 'John',
+            'surname' => 'Doe',
+            'email' => 'example@example.com',
+            'role' => 'S',
+            'year_started' => $study_pr_year_to_insert_with,
+            'program_code' => $study_pr_code_to_insert_with,
+            'password' => 'blabla'
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJsonIsObject();
+        $response->assertJsonPath('message', 'The password field must be at least 8 characters.');
+
+        $this->assertDatabaseMissing('users', ['email' => 'example@example.com', 'role' => 'S']);
+    }
+
+    public function test_registerAuthenticatedAsAdmin_Create_S_nonExistingStudyProgram_FailNameRequired() {
+        $study_pr_year_to_insert_with = 2025;
+        $study_pr_code_to_insert_with = 'BX0012';
+        $this->assertDatabaseMissing('study_program_instances', [
+            'program_code' => $study_pr_code_to_insert_with,
+            'year_started' => $study_pr_year_to_insert_with
+        ]);
+
+        $this->assertDatabaseMissing('users', ['email' => 'example@example.com', 'role' => 'S']);
+        $response = $this->asUserRole('A')->postJson('/register', [
+            'name' => 'John',
+            'surname' => 'Doe',
+            'email' => 'example@example.com',
+            'role' => 'S',
+            'year_started' => $study_pr_year_to_insert_with,
+            'program_code' => $study_pr_code_to_insert_with,
+            'password' => 'blabla123'
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJsonIsObject();
+        $response->assertJsonPath('message', 'The selected program code is invalid.');
+
+        $this->assertDatabaseMissing('users', ['email' => 'example@example.com', 'role' => 'S']);
+    }
 }
