@@ -14,7 +14,7 @@ class FacultyTest extends TestCase
     // retrieving faculties
     public function test_getFacultiesAsAdmin_noArgs_allFaculties(): void
     {
-        $response = $this->asUserRole('A')->get('/faculties'); // Act
+        $response = $this->asUserRole('A')->getJson('/faculties'); // Act
 
         $response->assertStatus(200); // Assert
         $response->assertJsonIsArray();
@@ -28,7 +28,7 @@ class FacultyTest extends TestCase
 
     public function test_getFacultiesAsProf_noArgs_noPrivilege(): void
     {
-        $response = $this->asUserRole('P')->get('/faculties'); // Act
+        $response = $this->asUserRole('P')->getJson('/faculties'); // Act
 
         $response->assertStatus(200); // Assert
         $response->assertJsonIsArray();
@@ -42,7 +42,7 @@ class FacultyTest extends TestCase
 
     public function test_getFacultiesAsStudent_noArgs_noPrivilege(): void
     {
-        $response = $this->asUserRole('S')->get('/faculties'); // Act
+        $response = $this->asUserRole('S')->getJson('/faculties'); // Act
 
         $response->assertStatus(403); // Assert
         $response->assertJsonIsObject();
@@ -55,7 +55,7 @@ class FacultyTest extends TestCase
     {
         $facultyCode='FIZ';
         
-        $response = $this->asUserRole('A')->get('/faculties/'.$facultyCode); // Act
+        $response = $this->asUserRole('A')->getJson('/faculties/'.$facultyCode); // Act
 
         $response->assertStatus(200); // Assert
         $response->assertJsonIsObject();
@@ -73,7 +73,7 @@ class FacultyTest extends TestCase
     {
         $facultyCode='FIZ';
         
-        $response = $this->asUserRole('P')->get('/faculties/'.$facultyCode); // Act
+        $response = $this->asUserRole('P')->getJson('/faculties/'.$facultyCode); // Act
 
         $response->assertStatus(200); // Assert
         $response->assertJsonIsObject();
@@ -91,7 +91,7 @@ class FacultyTest extends TestCase
     {
         $facultyCode='FIZ';
         
-        $response = $this->asUserRole('S')->get('/faculties/'.$facultyCode); // Act
+        $response = $this->asUserRole('S')->getJson('/faculties/'.$facultyCode); // Act
 
         $response->assertStatus(200); // Assert
         $response->assertJsonIsObject();
