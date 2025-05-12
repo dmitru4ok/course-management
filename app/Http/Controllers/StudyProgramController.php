@@ -69,6 +69,8 @@ class StudyProgramController extends Controller
             // get semesters
             // for each semester get compulsory courses
             // instert semesters and their courses for the new instance
+
+            // use Model::insert() for bulk insert
         }
        
         return $new_instance;

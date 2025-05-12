@@ -151,6 +151,7 @@ return [
         'nbf',
         'sub',
         'jti',
+        'role'
     ],
 
     /*

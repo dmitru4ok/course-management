@@ -41,7 +41,10 @@ Route::middleware('auth:api')->group(function() {
         Route::get('/study_programs/instances/{year}', 'show_instances_by_year');
         Route::get('/study_programs/{code}/instances/{year}', 'show_specific');
     
-        Route::post('/study_programs', 'create_study_program')->name('study_program.create')->middleware('role:A');
+        Route::post('/study_programs', 'create_study_program')
+            ->name('study_program.create')
+            ->middleware('role:A');
+
         Route::post('/study_programs/instances', 'create_study_program_instance')
             ->name('study_program.instantiate')
             ->middleware('role:A');
