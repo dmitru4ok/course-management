@@ -2,10 +2,15 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 use function PHPUnit\Framework\assertEquals;
+use function PHPUnit\Framework\assertJson;
+use function PHPUnit\Framework\assertNotEquals;
+use function PHPUnit\Framework\assertNotNull;
+use function PHPUnit\Framework\assertNull;
 
 // test naming convention: test_{name of function/route args(or their absence)}_{anticipated result}
 class AuthEndpointsTest extends TestCase
@@ -373,5 +378,64 @@ class AuthEndpointsTest extends TestCase
         $response->assertJsonPath('message', 'The selected program code is invalid.');
 
         $this->assertDatabaseMissing('users', ['email' => 'example@example.com', 'role' => 'S']);
+    }
+
+    public function test_loginUnauthenticated_Success() {
+
+        $this->assertDatabaseHas('users', ['email' => env('ADMIN_ONE_EMAIL'), 'role' => 'A']);
+        $response = $this->postJson('/login', [
+            'email' => env('ADMIN_ONE_EMAIL'),
+            'password' => env('ADMIN_ONE_PASSWORD')
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertJsonIsObject();
+        $response->assertJson([
+            'expires_in' => env('JWT_TTL') * 60,
+            'user' => [
+                'email' => env('ADMIN_ONE_EMAIL'),
+                'role' => 'A'
+            ]
+        ]);
+        $response->assertJsonPath('user.year_started', null);
+        $response->assertJsonPath('user.program_code', null);
+    }
+
+    public function test_loginWrongPassword_Fail() {
+
+        $this->assertDatabaseHas('users', ['email' => env('ADMIN_ONE_EMAIL'), 'role' => 'A']);
+        $response = $this->postJson('/login', [
+            'email' => env('ADMIN_ONE_EMAIL'),
+            'password' => env('ADMIN_ONE_PASSWORD').'some_extra_chars' // wrong password
+        ]);
+
+        $response->assertStatus(401);
+        $response->assertJsonIsObject();
+        $response->assertExactJson([
+            'error' => 'Invalid credentials',
+        ]);
+    }
+
+    public function test_logoutUnauthenticated_Fail() {
+
+        $this->assertDatabaseHas('users', ['email' => env('ADMIN_ONE_EMAIL'), 'role' => 'A']);
+        $response = $this->postJson('/logout');
+
+        $response->assertStatus(401);
+        $response->assertJsonIsObject();
+        $response->assertJson([ 'message' => 'Unauthenticated.']);
+    }
+
+    public function test_logoutAuthenticated_Success() {
+
+        $this->assertDatabaseHas('users', ['email' => env('ADMIN_ONE_EMAIL'), 'role' => 'A']);
+        $user = User::query()->where('email', env('ADMIN_ONE_EMAIL'))->first();
+        auth('api')->login($user);
+        assertNotNull(auth('api')->user());
+
+        $response = $this->postJson('/logout');
+
+        $response->assertStatus(200);
+        assertNull(auth('api')->user());
     }
 }
