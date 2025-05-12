@@ -14,10 +14,11 @@ class StudyProgram extends Model
         'program_code',
         'program_name',
         'program_type',
-        'faculty_code'
+        'faculty_code',
+        'is_valid'
     ];
 
     function instances() {
-        return $this->hasMany(StudyProgramInstance::class, "program_code", "program_code");
+        return $this->hasMany(StudyProgramInstance::class)->where('program_code', $this->program_code);
     }
 }
