@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 
 class StudyProgramController extends Controller
 {
+    public static string $notFoundMessage = 'Not found';
     public function index()
     {
         return StudyProgram::all();
@@ -21,22 +22,37 @@ class StudyProgramController extends Controller
 
     public function show_instances_by_year(int $year)
     {
-        return StudyProgramInstance::where('year_started', $year)->get();
+        $result = StudyProgramInstance::where('year_started', $year)->get();
+        if ( count($result) !== 0) {
+            return $result;
+        }
+        return response(['message'=> self::$notFoundMessage ], 404);
     }
 
     public function show_study_program_by_id(string $code)
     {
-        return StudyProgram::where('program_code', $code)->firstOrFail();
+        if ($result = StudyProgram::where('program_code', $code)->first()) {
+            return $result;
+        }
+       
+        return response(['message'=> self::$notFoundMessage ], 404);
     }
 
     public function show_by_code_instances(string $code)
     {
-        return StudyProgramInstance::where('program_code', $code)->get();
+        $result = StudyProgramInstance::where('program_code', $code)->get();
+        if (count($result) !== 0) {
+            return $result;
+        }
+        return response(['message'=> self::$notFoundMessage ], 404);
     }
 
     public function show_specific(string $code, int $year)
     {
-        return StudyProgramInstance::where('year_started', $year)->where("program_code", $code)->firstOrFail();
+        if ($result = StudyProgramInstance::where('year_started', $year)->where("program_code", $code)->first()) {
+            return $result;
+        }
+        return response(['message'=> self::$notFoundMessage ], 404);
     }
 
     public function create_study_program(StudyProgramRequest $request)
