@@ -35,6 +35,8 @@ class UserFactory extends Factory
             UserType::Student, 
             UserType::Student, 
             UserType::Professor, 
+            UserType::Professor, 
+            UserType::Professor, 
             UserType::Admin
         ]); // for increasing student probability
         

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class CourseOffering extends Model
 {
@@ -21,4 +22,14 @@ class CourseOffering extends Model
     protected $primaryKey = 'offering_id';
     public $timestamps = false;
     public $incrementing = true;
+
+     
+    public function offeringProfessor(): BelongsToMany {
+        return $this->belongsToMany(
+            \App\Models\User::class,
+            'teaches',
+            'offering_id',
+            'prof_id'
+        );
+    }
 }

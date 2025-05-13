@@ -23,6 +23,6 @@ class UserSeeder extends Seeder
                 'password' => Hash::make(env('ADMIN_ONE_PASSWORD'))
             ]
         ]);
-        \App\Models\User::factory()->count(20)->create();
+        \App\Models\User::factory()->count(40)->create();
     }
 }

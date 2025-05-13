@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('course_offerings', function (Blueprint $table) {
             $table->id('offering_id');
             $table->primary('offering_id');
-            $table->string('classroom', 50);
+            $table->integer('classroom', false, true);
             $table->enum('building', array_column(\App\Enums\Building::cases(), 'value'));
-            $table->integer('course_code', false, true);
+            $table->integer('course_code', false, true)->nullable();
             $table->foreign('course_code')->references('course_code')->on('course_blueprints')->onDelete('cascade');
         });
     }
