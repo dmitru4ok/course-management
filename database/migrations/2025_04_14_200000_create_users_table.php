@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\UserType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id('user_id');
-            $table->char('role', 1);
+            $table->enum('role', array_column(UserType::cases(), 'value'));
             $table->string('name', 100);
             $table->string('surname', 100);
             $table->string('email')->unique();
@@ -23,7 +24,6 @@ return new class extends Migration
 
             $table->foreign(['program_code', 'year_started'])->references(['program_code', 'year_started'])->on('study_program_instances')->onDelete('cascade');
         });
-        Illuminate\Support\Facades\DB::statement( "ALTER TABLE users ADD CONSTRAINT chk_role CHECK (role IN ('S', 'P', 'A'))");
     }
 
     public function down(): void

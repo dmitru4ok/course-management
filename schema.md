@@ -12,7 +12,7 @@
 
 **CourseBlueprint**(<ins>course_code</ins>, credit_weight, is_valid, *faculty_code*) **DONE**
 
-**CourseOffering**(<ins>offering_id</ins>, date_to, date_from, classroom, *course_code*) # need seeder
+**CourseOffering**(<ins>offering_id</ins>, classroom, *course_code*) **DONE**
 
 **Semester**(<ins>*year_started*, *program_code*, sem_no</ins>, is_active, credits_required) **DONE**
 

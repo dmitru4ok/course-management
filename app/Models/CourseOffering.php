@@ -2,19 +2,23 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class CourseOffering extends Model
 {
+    use HasFactory;
     public $fillable = [
-        'date_from',
-        'date_to',
+        'building',
         'classroom',
         'course_code'
     ];
 
+    protected $casts = [
+        'building' => \App\Enums\Building::class
+    ];
+
     protected $primaryKey = 'offering_id';
-    protected $keyType = 'bigInteger';
     public $timestamps = false;
     public $incrementing = true;
 }

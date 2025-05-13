@@ -5,7 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\StudyProgramInstance;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
+use App\Enums\UserType;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -25,7 +25,19 @@ class UserFactory extends Factory
     public function definition(): array
     {
         
-        $role = fake()->randomElement(['S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'P','A']); // for increasing student probability
+        $role = fake()->randomElement([ 
+            UserType::Student, 
+            UserType::Student, 
+            UserType::Student, 
+            UserType::Student, 
+            UserType::Student, 
+            UserType::Student, 
+            UserType::Student, 
+            UserType::Student, 
+            UserType::Professor, 
+            UserType::Admin
+        ]); // for increasing student probability
+        
         $data = [
             'name' => fake()->firstName(),
             'surname' => fake()->lastName(),
@@ -35,7 +47,7 @@ class UserFactory extends Factory
             
         ];
 
-        if ($role === 'S') {
+        if ($role === UserType::Student) {
             $instance = StudyProgramInstance::inRandomOrder()->first();
             $data['year_started'] = $instance->year_started;
             $data['program_code'] = $instance->program_code;

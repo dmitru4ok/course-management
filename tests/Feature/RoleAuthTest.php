@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Enums\UserType;
 
 // test naming convention: test_{name of function/route args(or their absence)}_{anticipated result}
 class RoleAuthTest extends TestCase
@@ -22,17 +23,17 @@ class RoleAuthTest extends TestCase
         $response_no_auth->assertJsonIsObject();
         $response_no_auth->assertExactJson(['message' => 'OK']);
 
-        $response_role_Admin = $this->asUserRole('A')->getJson(self::path);
+        $response_role_Admin = $this->asUserRole(UserType::Admin)->getJson(self::path);
         $response_role_Admin->assertStatus(200);
         $response_role_Admin->assertJsonIsObject();
         $response_role_Admin->assertExactJson(['message' => 'OK']);
 
-        $response_role_Prof = $this->asUserRole('P')->getJson(self::path);
+        $response_role_Prof = $this->asUserRole(UserType::Professor)->getJson(self::path);
         $response_role_Prof->assertStatus(200);
         $response_role_Prof->assertJsonIsObject();
         $response_role_Prof->assertExactJson(['message' => 'OK']);
 
-        $response_role_Stud = $this->asUserRole('S')->getJson(self::path);
+        $response_role_Stud = $this->asUserRole(UserType::Student)->getJson(self::path);
         $response_role_Stud->assertStatus(200);
         $response_role_Stud->assertJsonIsObject();
         $response_role_Stud->assertExactJson(['message' => 'OK']);
@@ -48,17 +49,17 @@ class RoleAuthTest extends TestCase
         $response_no_auth->assertJsonIsObject();
         $response_no_auth->assertExactJson(['message' => 'Unauthenticated.']);
 
-        $response_role_Admin = $this->asUserRole('A')->getJson(self::path);
+        $response_role_Admin = $this->asUserRole(UserType::Admin)->getJson(self::path);
         $response_role_Admin->assertStatus(200);
         $response_role_Admin->assertJsonIsObject();
         $response_role_Admin->assertExactJson(['message' => 'OK']);
 
-        $response_role_Prof = $this->asUserRole('P')->getJson(self::path);
+        $response_role_Prof = $this->asUserRole(UserType::Professor)->getJson(self::path);
         $response_role_Prof->assertStatus(200);
         $response_role_Prof->assertJsonIsObject();
         $response_role_Prof->assertExactJson(['message' => 'OK']);
 
-        $response_role_Stud = $this->asUserRole('S')->getJson(self::path);
+        $response_role_Stud = $this->asUserRole(UserType::Student)->getJson(self::path);
         $response_role_Stud->assertStatus(200);
         $response_role_Stud->assertJsonIsObject();
         $response_role_Stud->assertExactJson(['message' => 'OK']);
@@ -85,7 +86,7 @@ class RoleAuthTest extends TestCase
         $response_no_auth->assertJsonIsObject();
         $response_no_auth->assertExactJson(['message' => 'Unauthenticated.']);
 
-        $response_role_Admin = $this->asUserRole('A')->getJson(self::path);
+        $response_role_Admin = $this->asUserRole(UserType::Admin)->getJson(self::path);
         $response_role_Admin->assertStatus(200);
         $response_role_Admin->assertJsonIsObject();
         $response_role_Admin->assertExactJson(['message' => 'OK']);
@@ -97,7 +98,7 @@ class RoleAuthTest extends TestCase
             return response(['message' => 'OK'], 200);
         });
 
-        $response_role_Admin = $this->asUserRole('P')->getJson(self::path);
+        $response_role_Admin = $this->asUserRole(UserType::Professor)->getJson(self::path);
         $response_role_Admin->assertStatus(403);
         $response_role_Admin->assertJsonIsObject();
         $response_role_Admin->assertExactJson(['message' => 'No privilege to access this resource']);
@@ -108,7 +109,7 @@ class RoleAuthTest extends TestCase
             return response(['message' => 'OK'], 200);
         });
 
-        $response_role_Admin = $this->asUserRole('S')->getJson(self::path);
+        $response_role_Admin = $this->asUserRole(UserType::Student)->getJson(self::path);
         $response_role_Admin->assertStatus(403);
         $response_role_Admin->assertJsonIsObject();
         $response_role_Admin->assertExactJson(['message' => 'No privilege to access this resource']);
@@ -130,7 +131,7 @@ class RoleAuthTest extends TestCase
             return response(['message' => 'OK'], 200);
         });
 
-        $response_role_Admin = $this->asUserRole('A')->getJson(self::path);
+        $response_role_Admin = $this->asUserRole(UserType::Admin)->getJson(self::path);
         $response_role_Admin->assertStatus(403);
         $response_role_Admin->assertJsonIsObject();
         $response_role_Admin->assertExactJson(['message' => 'No privilege to access this resource']);
@@ -142,7 +143,7 @@ class RoleAuthTest extends TestCase
             return response(['message' => 'OK'], 200);
         });
 
-        $response_role_Prof = $this->asUserRole('P')->getJson(self::path);
+        $response_role_Prof = $this->asUserRole(UserType::Professor)->getJson(self::path);
         $response_role_Prof->assertStatus(200);
         $response_role_Prof->assertJsonIsObject();
         $response_role_Prof->assertExactJson(['message' => 'OK']);
@@ -154,7 +155,7 @@ class RoleAuthTest extends TestCase
             return response(['message' => 'OK'], 200);
         });
 
-        $response_role_Prof = $this->asUserRole('S')->getJson(self::path);
+        $response_role_Prof = $this->asUserRole(UserType::Student)->getJson(self::path);
         $response_role_Prof->assertStatus(403);
         $response_role_Prof->assertJsonIsObject();
         $response_role_Prof->assertExactJson(['message' => 'No privilege to access this resource']);
@@ -178,7 +179,7 @@ class RoleAuthTest extends TestCase
             return response(['message' => 'OK'], 200);
         })->middleware(['auth:api', 'role:A|P']);;
 
-        $response_role_Admin = $this->asUserRole('A')->getJson(self::path);
+        $response_role_Admin = $this->asUserRole(UserType::Admin)->getJson(self::path);
         $response_role_Admin->assertStatus(200);
         $response_role_Admin->assertJsonIsObject();
         $response_role_Admin->assertExactJson(['message' => 'OK']);
@@ -190,7 +191,7 @@ class RoleAuthTest extends TestCase
             return response(['message' => 'OK'], 200);
         })->middleware(['auth:api', 'role:A|P']);;
 
-        $response_role_Prof = $this->asUserRole('P')->getJson(self::path);
+        $response_role_Prof = $this->asUserRole(UserType::Professor)->getJson(self::path);
         $response_role_Prof->assertStatus(200);
         $response_role_Prof->assertJsonIsObject();
         $response_role_Prof->assertExactJson(['message' => 'OK']);
@@ -202,7 +203,7 @@ class RoleAuthTest extends TestCase
             return response(['message' => 'OK'], 200);
         })->middleware(['auth:api', 'role:A|P']);;
 
-        $response_role_Prof = $this->asUserRole('S')->getJson(self::path);
+        $response_role_Prof = $this->asUserRole(UserType::Student)->getJson(self::path);
         $response_role_Prof->assertStatus(403);
         $response_role_Prof->assertJsonIsObject();
         $response_role_Prof->assertExactJson(['message' => 'No privilege to access this resource']);
@@ -226,7 +227,7 @@ class RoleAuthTest extends TestCase
             return response(['message' => 'OK'], 200);
         })->middleware(['auth:api', 'role:A|S']);;
 
-        $response_role_Admin = $this->asUserRole('A')->getJson(self::path);
+        $response_role_Admin = $this->asUserRole(UserType::Admin)->getJson(self::path);
         $response_role_Admin->assertStatus(200);
         $response_role_Admin->assertJsonIsObject();
         $response_role_Admin->assertExactJson(['message' => 'OK']);
@@ -238,7 +239,7 @@ class RoleAuthTest extends TestCase
             return response(['message' => 'OK'], 200);
         })->middleware(['auth:api', 'role:A|S']);;
 
-        $response_role_Prof = $this->asUserRole('P')->getJson(self::path);
+        $response_role_Prof = $this->asUserRole(UserType::Professor)->getJson(self::path);
         $response_role_Prof->assertStatus(403);
         $response_role_Prof->assertJsonIsObject();
         $response_role_Prof->assertExactJson(['message' => 'No privilege to access this resource']);
@@ -250,7 +251,7 @@ class RoleAuthTest extends TestCase
             return response(['message' => 'OK'], 200);
         })->middleware(['auth:api', 'role:A|S']);;
 
-        $response_role_Prof = $this->asUserRole('S')->getJson(self::path);
+        $response_role_Prof = $this->asUserRole(UserType::Student)->getJson(self::path);
         $response_role_Prof->assertStatus(200);
         $response_role_Prof->assertJsonIsObject();
         $response_role_Prof->assertExactJson(['message' => 'OK']);
@@ -274,7 +275,7 @@ class RoleAuthTest extends TestCase
             return response(['message' => 'OK'], 200);
         })->middleware(['auth:api', 'role:P|S']);;
 
-        $response_role_Admin = $this->asUserRole('A')->getJson(self::path);
+        $response_role_Admin = $this->asUserRole(UserType::Admin)->getJson(self::path);
         $response_role_Admin->assertStatus(403);
         $response_role_Admin->assertJsonIsObject();
         $response_role_Admin->assertExactJson(['message' => 'No privilege to access this resource']);
@@ -286,7 +287,7 @@ class RoleAuthTest extends TestCase
             return response(['message' => 'OK'], 200);
         })->middleware(['auth:api', 'role:P|S']);;
 
-        $response_role_Prof = $this->asUserRole('P')->getJson(self::path);
+        $response_role_Prof = $this->asUserRole(UserType::Professor)->getJson(self::path);
         $response_role_Prof->assertStatus(200);
         $response_role_Prof->assertJsonIsObject();
         $response_role_Prof->assertExactJson(['message' => 'OK']);
@@ -298,7 +299,7 @@ class RoleAuthTest extends TestCase
             return response(['message' => 'OK'], 200);
         })->middleware(['auth:api', 'role:P|S']);;
 
-        $response_role_Prof = $this->asUserRole('S')->getJson(self::path);
+        $response_role_Prof = $this->asUserRole(UserType::Student)->getJson(self::path);
         $response_role_Prof->assertStatus(200);
         $response_role_Prof->assertJsonIsObject();
         $response_role_Prof->assertExactJson(['message' => 'OK']);
@@ -322,7 +323,7 @@ class RoleAuthTest extends TestCase
             return response(['message' => 'OK'], 200);
         })->middleware(['auth:api', 'role:S']);;
 
-        $response_role_Admin = $this->asUserRole('A')->getJson(self::path);
+        $response_role_Admin = $this->asUserRole(UserType::Admin)->getJson(self::path);
         $response_role_Admin->assertStatus(403);
         $response_role_Admin->assertJsonIsObject();
         $response_role_Admin->assertExactJson(['message' => 'No privilege to access this resource']);
@@ -334,7 +335,7 @@ class RoleAuthTest extends TestCase
             return response(['message' => 'OK'], 200);
         })->middleware(['auth:api', 'role:S']);;
 
-        $response_role_Prof = $this->asUserRole('P')->getJson(self::path);
+        $response_role_Prof = $this->asUserRole(UserType::Professor)->getJson(self::path);
         $response_role_Prof->assertStatus(403);
         $response_role_Prof->assertJsonIsObject();
         $response_role_Prof->assertExactJson(['message' => 'No privilege to access this resource']);
@@ -346,7 +347,7 @@ class RoleAuthTest extends TestCase
             return response(['message' => 'OK'], 200);
         })->middleware(['auth:api', 'role:S']);;
 
-        $response_role_Prof = $this->asUserRole('S')->getJson(self::path);
+        $response_role_Prof = $this->asUserRole(UserType::Student)->getJson(self::path);
         $response_role_Prof->assertStatus(200);
         $response_role_Prof->assertJsonIsObject();
         $response_role_Prof->assertExactJson(['message' => 'OK']);

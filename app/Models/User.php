@@ -19,17 +19,18 @@ class User extends Authenticatable implements JWTSubject
     public $timestamps = false;
     protected $hidden = ['password'];
 
-    protected function casts(): array
-    {
-        return [
-            'password' => 'hashed',
-        ];
+    protected $casts = [
+        'password' => 'hashed',
+        'role' => \App\Enums\UserType::class
+    ];
+
+    public function getRoleNameAttribute() {
+        return $this->role->value;
     }
 
     public function getJWTIdentifier() {
         return $this->getKey();
     }
-
 
     public function getJWTCustomClaims() {
         return [ 'role' => $this->role ];
