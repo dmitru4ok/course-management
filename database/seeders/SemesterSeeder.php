@@ -4,60 +4,31 @@ namespace Database\Seeders;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Carbon;
+use App\Models\StudyProgramInstance;
+use App\Models\Semester;
 
 class SemesterSeeder extends Seeder
 {
     public function run(): void
     {
-        DB::table('semesters')->insert([
-            [
-                'year_started' => 2023,
-                'program_code' => 'BX0012',
-                'sem_no' => 1,
-                'is_valid' => false,
-                'date_from' => '2023-09-01',
-                'date_to' => '2024-01-31'
-            ],
-            [
-                'year_started' => 2023,
-                'program_code' => 'BX0012',
-                'sem_no' => 2,
-                'is_valid' => false,
-                'date_from' => '2024-02-09',
-                'date_to' => '2024-06-15'
-            ],
-            [
-                'year_started' => 2023,
-                'program_code' => 'BX0012',
-                'sem_no' => 3,
-                'is_valid' => true,
-                'date_from' => '2024-09-01',
-                'date_to' => '2025-01-28'
-            ],
-            [
-                'year_started' => 2023,
-                'program_code' => 'BX0012',
-                'sem_no' => 4,
-                'is_valid' => false,
-                'date_from' => '2025-02-05',
-                'date_to' => '2025-06-19'
-            ],
-            [
-                'year_started' => 2023,
-                'program_code' => 'BX0012',
-                'sem_no' => 5,
-                'is_valid' => false,
-                'date_from' => '2025-09-02',
-                'date_to' => '2026-01-28'
-            ],
-            [
-                'year_started' => 2023,
-                'program_code' => 'BX0012',
-                'sem_no' => 6,
-                'is_valid' => false,
-                'date_from' => '2026-02-05',
-                'date_to' => '2026-06-18'
-            ]
-        ]);
-    }
+        StudyProgramInstance::all()->each(function ($instance) {
+            $total = 7;
+            $startYear = $instance->year_started;
+
+            for ($i = 1; $i <= $total; $i++) {
+                $startDate = Carbon::create($startYear, 9, 1)->addMonths(6 * ($i - 1));
+                $endDate = (clone $startDate)->addMonths(6)->subDay();
+
+                Semester::create([
+                    'program_code' => $instance->program_code,
+                    'year_started' => $startYear,
+                    'sem_no' => $i,
+                    'is_valid' => true,
+                    'date_from' => $startDate->toDateString(),
+                    'date_to' => $endDate->toDateString(),
+                ]);
+            }
+        });
+    } 
 }

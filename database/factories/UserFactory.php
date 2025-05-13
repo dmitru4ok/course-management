@@ -24,16 +24,23 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
-        $instance = StudyProgramInstance::inRandomOrder()->first();
-
-        return [
-            'name' => fake()->name(),
+        
+        $role = fake()->randomElement(['S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'P','A']); // for increasing student probability
+        $data = [
+            'name' => fake()->firstName(),
             'surname' => fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),
-            'role' => fake()->randomElement(['S', 'P', 'A']),
+            'role' => $role,
             'password' => static::$password ??= Hash::make('password'),
-            'year_started' => $instance->year_started,
-            'program_code' => $instance->program_code
+            
         ];
+
+        if ($role === 'S') {
+            $instance = StudyProgramInstance::inRandomOrder()->first();
+            $data['year_started'] = $instance->year_started;
+            $data['program_code'] = $instance->program_code;
+        }
+
+        return $data;
     }
 }
