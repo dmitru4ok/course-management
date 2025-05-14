@@ -18,7 +18,7 @@
 
 **SemesterCourseRequirement**(<ins>*course_code*, *program_code*, *year_started*, *sem_no*</ins>) **DONE**
 
-**Teaches**(<ins>*offering_id*, *prof_id*</ins>)
+**Teaches**(<ins>*offering_id*, *prof_id*</ins>) **DONE**
 
 **AvailableIn**(<ins>*offering_id*, *sem_no*, *year_started*, *program_code*</ins>)
 

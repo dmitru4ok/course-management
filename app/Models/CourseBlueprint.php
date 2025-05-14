@@ -24,4 +24,9 @@ class CourseBlueprint extends Model
     {
         return $this->hasMany(CourseOffering::class, 'course_code', 'course_code');
     }
+
+    public function faculty()
+    {
+        return $this->belongsTo(Faculty::class, 'faculty_code', 'faculty_code');
+    }
 }

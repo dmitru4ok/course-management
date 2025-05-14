@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class StudyProgram extends Model
 {
@@ -20,5 +21,9 @@ class StudyProgram extends Model
 
     function instances() {
         return $this->hasMany(StudyProgramInstance::class)->where('program_code', $this->program_code);
+    }
+
+    function faculty(): BelongsTo {
+        return $this->belongsTo(Faculty::class, 'faculty_code', 'faculty_code');
     }
 }

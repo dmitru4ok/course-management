@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Enums\UserType;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -17,6 +19,9 @@ class DatabaseSeeder extends Seeder
         $this->call(SemesterCourseRequirementSeeder::class);
         $this->call(CourseOfferingSeeder::class);
         $this->call(TeachesSeeder::class);
+        $this->call(AvailableInSeeder::class);
         
+        // $res = User::where('role', UserType::Professor)->with('coursesTaught')->get()->map( fn($user) => $user->coursesTaught->toArray());
+        // dd($res);
     }
 }

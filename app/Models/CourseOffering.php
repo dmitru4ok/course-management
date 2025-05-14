@@ -32,4 +32,12 @@ class CourseOffering extends Model
             'prof_id'
         );
     }
+
+   public function courseBlueprint() {
+        return $this->belongsTo(
+            \App\Models\CourseBlueprint::class,
+            'course_code',
+            'course_code'
+        );
+    }
 }
