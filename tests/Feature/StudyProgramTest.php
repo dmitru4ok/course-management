@@ -6,6 +6,7 @@ use App\Models\StudyProgram;
 use App\Models\StudyProgramInstance;
 use App\Http\Controllers\StudyProgramController;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Enums\UserType;
 use Tests\TestCase;
 
 class StudyProgramTest extends TestCase
@@ -14,7 +15,7 @@ class StudyProgramTest extends TestCase
     // test naming convention: test_{name of function/route args(or their absence)}_{anticipated result}
     public function test_getStudyPrograms_noArgs_allStudyPrograms()
     {
-        $response = $this->asUserRole('A')->getJson('/study_programs');
+        $response = $this->asUserRole(UserType::Admin)->getJson('/study_programs');
 
         $response->assertStatus(200);
         $response->assertJsonIsArray();
@@ -31,7 +32,7 @@ class StudyProgramTest extends TestCase
 
     public function test_getStudyPrograminstances_noArgs_allStudyProgramInstances()
     {
-        $response = $this->asUserRole('A')->getJson('/study_programs/instances');
+        $response = $this->asUserRole(UserType::Admin)->getJson('/study_programs/instances');
 
         $response->assertStatus(200);
         $response->assertJsonIsArray();
@@ -47,7 +48,7 @@ class StudyProgramTest extends TestCase
     public function test_getStudyProgramByCode_OneStudyProgram()
     {
         $program_code = 'BX0012';
-        $response = $this->asUserRole('A')->getJson('/study_programs/'. $program_code);
+        $response = $this->asUserRole(UserType::Admin)->getJson('/study_programs/'. $program_code);
         $this->assertDatabaseHas('study_programs', [
             'program_code' => $program_code, 
             'program_type' => 'B', 
@@ -68,7 +69,7 @@ class StudyProgramTest extends TestCase
     public function test_getStudyProgramInstancesByCode_OneStudyProgram()
     {
         $program_code = 'BX0012';
-        $response = $this->asUserRole('A')->getJson('/study_programs/'. $program_code.'/instances');
+        $response = $this->asUserRole(UserType::Admin)->getJson('/study_programs/'. $program_code.'/instances');
         $this->assertDatabaseHas('study_program_instances', [
             'program_code' => $program_code, 
             'is_active'=>true
@@ -91,7 +92,7 @@ class StudyProgramTest extends TestCase
     public function test_getStudyProgramInstancesByYear_OneStudyProgram()
     {
         $year = 2024;
-        $response = $this->asUserRole('A')->getJson('/study_programs/instances/'.$year);
+        $response = $this->asUserRole(UserType::Admin)->getJson('/study_programs/instances/'.$year);
         $this->assertDatabaseHas('study_program_instances', [
             'year_started' => $year, 
             'program_code' => 'BX0012',
@@ -122,7 +123,7 @@ class StudyProgramTest extends TestCase
             'is_active' => true
         ]);
 
-        $response = $this->asUserRole('A')->getJson("/study_programs/$program_code/instances/$year");
+        $response = $this->asUserRole(UserType::Admin)->getJson("/study_programs/$program_code/instances/$year");
 
         $response->assertStatus(200);
         $response->assertJsonIsObject();
@@ -138,7 +139,7 @@ class StudyProgramTest extends TestCase
     {
         $program_code = 'BX0011';
         $this->assertDatabaseMissing('study_programs', ['program_code'=>$program_code]);
-        $response = $this->asUserRole('A')->getJson('/study_programs/'. $program_code);
+        $response = $this->asUserRole(UserType::Admin)->getJson('/study_programs/'. $program_code);
 
         $response->assertStatus(404);
         $response->assertJsonIsObject();
@@ -152,7 +153,7 @@ class StudyProgramTest extends TestCase
     {
         $program_code = 'BX0011';
         $this->assertDatabaseMissing('study_program_instances', ['program_code'=>$program_code]);
-        $response = $this->asUserRole('A')->getJson('/study_programs/'. $program_code.'/instances');
+        $response = $this->asUserRole(UserType::Admin)->getJson('/study_programs/'. $program_code.'/instances');
 
         $response->assertStatus(404);
 
@@ -167,7 +168,7 @@ class StudyProgramTest extends TestCase
     {
         $year = 2027;
         $this->assertDatabaseMissing('study_program_instances', ['year_started'=>$year]);
-        $response = $this->asUserRole('A')->getJson('/study_programs/instances/'.$year);
+        $response = $this->asUserRole(UserType::Admin)->getJson('/study_programs/instances/'.$year);
 
         $response->assertStatus(404);
 
@@ -184,7 +185,7 @@ class StudyProgramTest extends TestCase
         $program_code = 'BX0012';
         $this->assertDatabaseMissing('study_program_instances', ['year_started'=>$year, 'program_code'=>$program_code]);
 
-        $response = $this->asUserRole('A')->getJson("/study_programs/$program_code/instances/$year");
+        $response = $this->asUserRole(UserType::Admin)->getJson("/study_programs/$program_code/instances/$year");
 
         $response->assertStatus(404);
         $response->assertJsonIsObject();

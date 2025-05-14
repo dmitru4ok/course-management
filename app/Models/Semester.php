@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Semester extends Model
 {
@@ -18,4 +19,14 @@ class Semester extends Model
         'date_from',
         'date_to'
     ];
+
+    public function studyProgram(): BelongsTo
+    {
+        return $this->belongsTo(StudyProgram::class, 'program_code', 'program_code');
+    }
+
+    public function faculty(): BelongsTo
+    {
+        return $this->studyProgram()->faculty();
+    }
 }

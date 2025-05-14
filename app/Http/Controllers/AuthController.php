@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
+use \App\Enums\UserType;
 
 class AuthController extends Controller
 {
@@ -34,7 +35,7 @@ class AuthController extends Controller
             'integer',
             'digits:4',
             'max:' . now()->year
-        ], fn ($input) => $input->role === 'S');
+        ], fn ($input) => $input->role === UserType::Student->value);
     
         $validator->sometimes('program_code', [
             'string',
@@ -42,7 +43,7 @@ class AuthController extends Controller
             Rule::exists('study_program_instances', 'program_code')->where(function ($query) use ($request) {
                 $query->where('year_started', $request->year_started);
             })
-        ], fn($input) => $input->role === 'S');
+        ], fn($input) => $input->role === UserType::Student->value);
 
         return response(User::create($validator->validate()), 201);
     }

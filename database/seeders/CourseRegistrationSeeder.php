@@ -2,17 +2,18 @@
 
 namespace Database\Seeders;
 
-use App\Models\CourseBlueprint;
-use App\Models\CourseOffering;
+use App\Enums\UserType;
+use App\Models\CourseRegistration;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
-class CourseOfferingSeeder extends Seeder
+class CourseRegistrationSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        CourseOffering::factory()->count(100)->create();
+        
     }
 }

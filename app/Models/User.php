@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
@@ -19,25 +20,39 @@ class User extends Authenticatable implements JWTSubject
     public $timestamps = false;
     protected $hidden = ['password'];
 
-    protected function casts(): array
-    {
-        return [
-            'password' => 'hashed',
-        ];
+    protected $casts = [
+        'password' => 'hashed',
+        'role' => \App\Enums\UserType::class
+    ];
+
+    public function getRoleNameAttribute() {
+        return $this->role->value;
     }
 
     public function getJWTIdentifier() {
         return $this->getKey();
     }
 
-
     public function getJWTCustomClaims() {
         return [ 'role' => $this->role ];
     }
 
-    public function studyProgram() {
-        return StudyProgram::query()
-            ->where('program_code', $this->program_code)->first();
+    public function studyProgram(): BelongsTo  {
+        return $this->belongsTo(
+            \App\Models\StudyProgram::class,
+            'program_code',
+            'program_code'
+        );
+    }
+
+    // for professors
+    public function coursesTaught(): BelongsToMany {
+        return $this->belongsToMany(
+            \App\Models\CourseOffering::class,
+            'teaches',
+            'prof_id',
+            'offering_id'
+        );
     }
 
     // public function studyProgramInstance() {

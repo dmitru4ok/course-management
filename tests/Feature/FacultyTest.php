@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use App\Enums\UserType;
 
 
 class FacultyTest extends TestCase
@@ -14,7 +15,7 @@ class FacultyTest extends TestCase
     // retrieving faculties
     public function test_getFacultiesAsAdmin_noArgs_allFaculties(): void
     {
-        $response = $this->asUserRole('A')->getJson('/faculties'); // Act
+        $response = $this->asUserRole(UserType::Admin)->getJson('/faculties'); // Act
 
         $response->assertStatus(200); // Assert
         $response->assertJsonIsArray();
@@ -28,7 +29,7 @@ class FacultyTest extends TestCase
 
     public function test_getFacultiesAsProf_noArgs_noPrivilege(): void
     {
-        $response = $this->asUserRole('P')->getJson('/faculties'); // Act
+        $response = $this->asUserRole(UserType::Professor)->getJson('/faculties'); // Act
 
         $response->assertStatus(200); // Assert
         $response->assertJsonIsArray();
@@ -42,7 +43,7 @@ class FacultyTest extends TestCase
 
     public function test_getFacultiesAsStudent_noArgs_noPrivilege(): void
     {
-        $response = $this->asUserRole('S')->getJson('/faculties'); // Act
+        $response = $this->asUserRole(UserType::Student)->getJson('/faculties'); // Act
 
         $response->assertStatus(200); // Assert
         $response->assertJsonIsArray();
@@ -58,7 +59,7 @@ class FacultyTest extends TestCase
     {
         $facultyCode='FIZ';
         
-        $response = $this->asUserRole('A')->getJson('/faculties/'.$facultyCode); // Act
+        $response = $this->asUserRole(UserType::Admin)->getJson('/faculties/'.$facultyCode); // Act
 
         $response->assertStatus(200); // Assert
         $response->assertJsonIsObject();
@@ -76,7 +77,7 @@ class FacultyTest extends TestCase
     {
         $facultyCode='FIZ';
         
-        $response = $this->asUserRole('P')->getJson('/faculties/'.$facultyCode); // Act
+        $response = $this->asUserRole(UserType::Professor)->getJson('/faculties/'.$facultyCode); // Act
 
         $response->assertStatus(200); // Assert
         $response->assertJsonIsObject();
@@ -94,7 +95,7 @@ class FacultyTest extends TestCase
     {
         $facultyCode='FIZ';
         
-        $response = $this->asUserRole('S')->getJson('/faculties/'.$facultyCode); // Act
+        $response = $this->asUserRole(UserType::Student)->getJson('/faculties/'.$facultyCode); // Act
 
         $response->assertStatus(200); // Assert
         $response->assertJsonIsObject();
@@ -112,7 +113,7 @@ class FacultyTest extends TestCase
     {
         $code_to_add = 'VBS';
         $name_to_add = 'VU Busines School';
-        $response = $this->asUserRole('A')->postJson('/faculties',
+        $response = $this->asUserRole(UserType::Admin)->postJson('/faculties',
             [
                 'faculty_code' => $code_to_add,
                 'faculty_name' => $name_to_add
@@ -132,7 +133,7 @@ class FacultyTest extends TestCase
     {
         $code_to_add = 'VBS';
         $name_to_add = 'VU Busines School';
-        $response = $this->asUserRole('P')->postJson('/faculties',
+        $response = $this->asUserRole(UserType::Professor)->postJson('/faculties',
             [
                 'faculty_code' => $code_to_add,
                 'faculty_name' => $name_to_add
@@ -148,7 +149,7 @@ class FacultyTest extends TestCase
     {
         $code_to_add = 'VBS';
         $name_to_add = 'VU Busines School';
-        $response = $this->asUserRole('S')->postJson('/faculties',
+        $response = $this->asUserRole(UserType::Student)->postJson('/faculties',
             [
                 'faculty_code' => $code_to_add,
                 'faculty_name' => $name_to_add
@@ -162,7 +163,7 @@ class FacultyTest extends TestCase
 
     public function test_postFacultiesAsAdmin_invalidTooShortCode_error422Caught(): void
     {
-        $response = $this->asUserRole('A')->postJson('/faculties',
+        $response = $this->asUserRole(UserType::Admin)->postJson('/faculties',
             [
                 "faculty_code" => "VF",
                 "faculty_name" => "imaginary faculty"
@@ -180,7 +181,7 @@ class FacultyTest extends TestCase
 
     public function test_postFacultiesAsProf_invalidTooLongCode_noPrivilege(): void
     {
-        $response = $this->asUserRole('P')->postJson('/faculties',
+        $response = $this->asUserRole(UserType::Professor)->postJson('/faculties',
             [
                 "faculty_code" => "VFF1",
                 "faculty_name" => "imaginary faculty"
@@ -194,7 +195,7 @@ class FacultyTest extends TestCase
 
     public function test_postFacultiesAsStudent_invalidTooLongCode_noPrivilege(): void
     {
-        $response = $this->asUserRole('S')->postJson('/faculties',
+        $response = $this->asUserRole(UserType::Student)->postJson('/faculties',
             [
                 "faculty_code" => "VFF1",
                 "faculty_name" => "imaginary faculty"
@@ -208,7 +209,7 @@ class FacultyTest extends TestCase
 
     public function test_postFacultiesAsAdmin_invalidEmptyCode_error422Caught(): void
     {
-        $response = $this->asUserRole('A')->postJson('/faculties',
+        $response = $this->asUserRole(UserType::Admin)->postJson('/faculties',
             [
                 "faculty_code" => "",
                 "faculty_name" => "imaginary faculty"
@@ -227,7 +228,7 @@ class FacultyTest extends TestCase
 
     public function test_postFacultiesAsProf_invalidEmptyCode_error422Caught(): void
     {
-        $response = $this->asUserRole('P')->postJson('/faculties',
+        $response = $this->asUserRole(UserType::Professor)->postJson('/faculties',
             [
                 "faculty_code" => "",
                 "faculty_name" => "imaginary faculty"
@@ -241,7 +242,7 @@ class FacultyTest extends TestCase
 
     public function test_postFacultiesAsStudent_invalidEmptyCode_error422Caught(): void
     {
-        $response = $this->asUserRole('S')->postJson('/faculties',
+        $response = $this->asUserRole(UserType::Student)->postJson('/faculties',
             [
                 "faculty_code" => "",
                 "faculty_name" => "imaginary faculty"
@@ -255,7 +256,7 @@ class FacultyTest extends TestCase
 
     public function test_postFacultiesAsAdmin_invalidTakenCode_error422Caught(): void
     {
-        $response = $this->asUserRole('A')->postJson('/faculties',
+        $response = $this->asUserRole(UserType::Admin)->postJson('/faculties',
             [
                 "faculty_code" => "MIF",
                 "faculty_name" => "imaginary faculty"
@@ -274,7 +275,7 @@ class FacultyTest extends TestCase
 
     public function test_postFacultiesAsProf_invalidTakenCode_error422Caught(): void
     {
-        $response = $this->asUserRole('P')->postJson('/faculties',
+        $response = $this->asUserRole(UserType::Professor)->postJson('/faculties',
             [
                 "faculty_code" => "MIF",
                 "faculty_name" => "imaginary faculty"
@@ -288,7 +289,7 @@ class FacultyTest extends TestCase
 
     public function test_postFacultiesAsStudent_invalidTakenCode_error422Caught(): void
     {
-        $response = $this->asUserRole('S')->postJson('/faculties',
+        $response = $this->asUserRole(UserType::Student)->postJson('/faculties',
             [
                 "faculty_code" => "MIF",
                 "faculty_name" => "imaginary faculty"
@@ -302,7 +303,7 @@ class FacultyTest extends TestCase
 
     public function test_postFacultiesAsAdmin_codeIsANumber_error422Caught(): void
     {
-        $response = $this->asUserRole('A')->postJson('/faculties',
+        $response = $this->asUserRole(UserType::Admin)->postJson('/faculties',
             [
                 "faculty_code" => 333,
                 "faculty_name" => "imaginary faculty"
@@ -321,7 +322,7 @@ class FacultyTest extends TestCase
 
     public function test_postFacultiesAsProf_codeIsANumber_error422Caught(): void
     {
-        $response = $this->asUserRole('P')->postJson('/faculties',
+        $response = $this->asUserRole(UserType::Professor)->postJson('/faculties',
             [
                 "faculty_code" => 333,
                 "faculty_name" => "imaginary faculty"
@@ -335,7 +336,7 @@ class FacultyTest extends TestCase
 
     public function test_postFacultiesAsStudent_codeIsANumber_error422Caught(): void
     {
-        $response = $this->asUserRole('S')->postJson('/faculties',
+        $response = $this->asUserRole(UserType::Student)->postJson('/faculties',
             [
                 "faculty_code" => 333,
                 "faculty_name" => "imaginary faculty"
@@ -349,7 +350,7 @@ class FacultyTest extends TestCase
 
     public function test_postFacultiesAsAdmin_nameEmpty_error422Caught(): void
     {
-        $response = $this->asUserRole('A')->postJson('/faculties',
+        $response = $this->asUserRole(UserType::Admin)->postJson('/faculties',
             [
                 "faculty_code" => "FIR",
                 "faculty_name" => ""
@@ -368,7 +369,7 @@ class FacultyTest extends TestCase
 
     public function test_postFacultiesAsProf_nameEmpty_error422Caught(): void
     {
-        $response = $this->asUserRole('P')->postJson('/faculties',
+        $response = $this->asUserRole(UserType::Professor)->postJson('/faculties',
             [
                 "faculty_code" => "FIR",
                 "faculty_name" => ""
@@ -382,7 +383,7 @@ class FacultyTest extends TestCase
 
     public function test_postFacultiesAsStudent_nameEmpty_error422Caught(): void
     {
-        $response = $this->asUserRole('S')->postJson('/faculties',
+        $response = $this->asUserRole(UserType::Student)->postJson('/faculties',
             [
                 "faculty_code" => "FIR",
                 "faculty_name" => ""
@@ -396,7 +397,7 @@ class FacultyTest extends TestCase
 
     public function test_postFacultiesAsAdmin_nameIsANumber_error422Caught(): void
     {
-        $response = $this->asUserRole('A')->postJson('/faculties',
+        $response = $this->asUserRole(UserType::Admin)->postJson('/faculties',
             [
                 "faculty_code" => "FIR",
                 "faculty_name" => 333
@@ -415,7 +416,7 @@ class FacultyTest extends TestCase
 
     public function test_postFacultiesAsProf_nameIsANumber_error422Caught(): void
     {
-        $response = $this->asUserRole('P')->postJson('/faculties',
+        $response = $this->asUserRole(UserType::Professor)->postJson('/faculties',
             [
                 "faculty_code" => "FIR",
                 "faculty_name" => 333
@@ -429,7 +430,7 @@ class FacultyTest extends TestCase
 
     public function test_postFacultiesAsStudent_nameIsANumber_error422Caught(): void
     {
-        $response = $this->asUserRole('S')->postJson('/faculties',
+        $response = $this->asUserRole(UserType::Student)->postJson('/faculties',
             [
                 "faculty_code" => "FIR",
                 "faculty_name" => 333
@@ -445,7 +446,7 @@ class FacultyTest extends TestCase
     {
         $too_long_faculty_name = "Faculty of Mathematics and Computer ScienceFaculty of Mathematics and Computer ScienceFaculty of Math";
         $this->assertTrue(strlen($too_long_faculty_name) === 101);
-        $response = $this->asUserRole('A')->postJson('/faculties',
+        $response = $this->asUserRole(UserType::Admin)->postJson('/faculties',
             [
                 "faculty_code" => "FIR",
                 "faculty_name" => $too_long_faculty_name
@@ -461,7 +462,7 @@ class FacultyTest extends TestCase
     {
         $too_long_faculty_name = "Faculty of Mathematics and Computer ScienceFaculty of Mathematics and Computer ScienceFaculty of Math";
         $this->assertTrue(strlen($too_long_faculty_name) === 101);
-        $response = $this->asUserRole('P')->postJson('/faculties',
+        $response = $this->asUserRole(UserType::Professor)->postJson('/faculties',
             [
                 "faculty_code" => "FIR",
                 "faculty_name" => $too_long_faculty_name
@@ -477,7 +478,7 @@ class FacultyTest extends TestCase
     {
         $too_long_faculty_name = "Faculty of Mathematics and Computer ScienceFaculty of Mathematics and Computer ScienceFaculty of Math";
         $this->assertTrue(strlen($too_long_faculty_name) === 101);
-        $response = $this->asUserRole('S')->postJson('/faculties',
+        $response = $this->asUserRole(UserType::Student)->postJson('/faculties',
             [
                 "faculty_code" => "FIR",
                 "faculty_name" => $too_long_faculty_name
@@ -494,7 +495,7 @@ class FacultyTest extends TestCase
     public function test_patchFacultiesAsAdmin_NonExistingFacultyCode_error404Caught(): void
     {
         $faculty_code_to_modify_non_existing = 'FIF';
-        $response = $this->asUserRole('A')->patchJson('/faculties/'.$faculty_code_to_modify_non_existing,
+        $response = $this->asUserRole(UserType::Admin)->patchJson('/faculties/'.$faculty_code_to_modify_non_existing,
             [
                 "faculty_name" => "New faculty name"
             ]
@@ -509,7 +510,7 @@ class FacultyTest extends TestCase
     public function test_patchFacultiesAsProf_NonExistingFacultyCode_error404Caught(): void
     {
         $faculty_code_to_modify_non_existing = 'FIF';
-        $response = $this->asUserRole('P')->patchJson('/faculties/'.$faculty_code_to_modify_non_existing,
+        $response = $this->asUserRole(UserType::Professor)->patchJson('/faculties/'.$faculty_code_to_modify_non_existing,
             [
                 "faculty_name" => "New faculty name"
             ]
@@ -523,7 +524,7 @@ class FacultyTest extends TestCase
     public function test_patchFacultiesAsStudent_NonExistingFacultyCode_error404Caught(): void
     {
         $faculty_code_to_modify_non_existing = 'FIF';
-        $response = $this->asUserRole('S')->patchJson('/faculties/'.$faculty_code_to_modify_non_existing,
+        $response = $this->asUserRole(UserType::Student)->patchJson('/faculties/'.$faculty_code_to_modify_non_existing,
             [
                 "faculty_name" => "New faculty name"
             ]
@@ -537,7 +538,7 @@ class FacultyTest extends TestCase
     public function test_patchFacultiesAsAdmin_emptyFacultyCode_error405Caught(): void
     {
         $faculty_code_to_modify_non_existing = '';
-        $response = $this->asUserRole('A')->patchJson('/faculties/'.$faculty_code_to_modify_non_existing,
+        $response = $this->asUserRole(UserType::Admin)->patchJson('/faculties/'.$faculty_code_to_modify_non_existing,
             [
                 "faculty_name" => "New faculty name"
             ]
@@ -549,7 +550,7 @@ class FacultyTest extends TestCase
     public function test_patchFacultiesAsProf_emptyFacultyCode_error405Caught(): void
     {
         $faculty_code_to_modify_non_existing = '';
-        $response = $this->asUserRole('P')->patchJson('/faculties/'.$faculty_code_to_modify_non_existing,
+        $response = $this->asUserRole(UserType::Professor)->patchJson('/faculties/'.$faculty_code_to_modify_non_existing,
             [
                 "faculty_name" => "New faculty name"
             ]
@@ -561,7 +562,7 @@ class FacultyTest extends TestCase
     public function test_patchFacultiesAsStudent_emptyFacultyCode_error405Caught(): void
     {
         $faculty_code_to_modify_non_existing = '';
-        $response = $this->asUserRole('S')->patchJson('/faculties/'.$faculty_code_to_modify_non_existing,
+        $response = $this->asUserRole(UserType::Student)->patchJson('/faculties/'.$faculty_code_to_modify_non_existing,
             [
                 "faculty_name" => "New faculty name"
             ]
@@ -574,7 +575,7 @@ class FacultyTest extends TestCase
     {
         $faculty_code_to_modify = 'FIZ';
         $new_faculty_name = "";
-        $response = $this->asUserRole('A')->patchJson('/faculties/'.$faculty_code_to_modify,
+        $response = $this->asUserRole(UserType::Admin)->patchJson('/faculties/'.$faculty_code_to_modify,
             [
                 "faculty_name" => $new_faculty_name
             ]
@@ -594,7 +595,7 @@ class FacultyTest extends TestCase
     {
         $faculty_code_to_modify = 'FIZ';
         $new_faculty_name = "";
-        $response = $this->asUserRole('P')->patchJson('/faculties/'.$faculty_code_to_modify,
+        $response = $this->asUserRole(UserType::Professor)->patchJson('/faculties/'.$faculty_code_to_modify,
             [
                 "faculty_name" => $new_faculty_name
             ]
@@ -609,7 +610,7 @@ class FacultyTest extends TestCase
     {
         $faculty_code_to_modify = 'FIZ';
         $new_faculty_name = "";
-        $response = $this->asUserRole('S')->patchJson('/faculties/'.$faculty_code_to_modify,
+        $response = $this->asUserRole(UserType::Student)->patchJson('/faculties/'.$faculty_code_to_modify,
             [
                 "faculty_name" => $new_faculty_name
             ]
@@ -624,7 +625,7 @@ class FacultyTest extends TestCase
     {
         $faculty_code_to_modify = 'FIZ';
         $new_faculty_name = 41414;
-        $response = $this->asUserRole('A')->patchJson('/faculties/'.$faculty_code_to_modify,
+        $response = $this->asUserRole(UserType::Admin)->patchJson('/faculties/'.$faculty_code_to_modify,
             [
                 "faculty_name" => $new_faculty_name
             ]
@@ -644,7 +645,7 @@ class FacultyTest extends TestCase
     {
         $faculty_code_to_modify = 'FIZ';
         $new_faculty_name = 41414;
-        $response = $this->asUserRole('P')->patchJson('/faculties/'.$faculty_code_to_modify,
+        $response = $this->asUserRole(UserType::Professor)->patchJson('/faculties/'.$faculty_code_to_modify,
             [
                 "faculty_name" => $new_faculty_name
             ]
@@ -659,7 +660,7 @@ class FacultyTest extends TestCase
     {
         $faculty_code_to_modify = 'FIZ';
         $new_faculty_name = 41414;
-        $response = $this->asUserRole('S')->patchJson('/faculties/'.$faculty_code_to_modify,
+        $response = $this->asUserRole(UserType::Student)->patchJson('/faculties/'.$faculty_code_to_modify,
             [
                 "faculty_name" => $new_faculty_name
             ]
@@ -675,7 +676,7 @@ class FacultyTest extends TestCase
         $faculty_code_to_modify = 'FIZ';
         $too_long_new_faculty_name = "Faculty of Mathematics and Computer ScienceFaculty of Mathematics and Computer ScienceFaculty of Math";
         $this->assertTrue(strlen($too_long_new_faculty_name) === 101);
-        $response = $this->asUserRole('A')->patchJson('/faculties/'.$faculty_code_to_modify,
+        $response = $this->asUserRole(UserType::Admin)->patchJson('/faculties/'.$faculty_code_to_modify,
             [
                 "faculty_name" => $too_long_new_faculty_name
             ]
@@ -696,7 +697,7 @@ class FacultyTest extends TestCase
         $faculty_code_to_modify = 'FIZ';
         $too_long_new_faculty_name = "Faculty of Mathematics and Computer ScienceFaculty of Mathematics and Computer ScienceFaculty of Math";
         $this->assertTrue(strlen($too_long_new_faculty_name) === 101);
-        $response = $this->asUserRole('P')->patchJson('/faculties/'.$faculty_code_to_modify,
+        $response = $this->asUserRole(UserType::Professor)->patchJson('/faculties/'.$faculty_code_to_modify,
             [
                 "faculty_name" => $too_long_new_faculty_name
             ]
@@ -712,7 +713,7 @@ class FacultyTest extends TestCase
         $faculty_code_to_modify = 'FIZ';
         $too_long_new_faculty_name = "Faculty of Mathematics and Computer ScienceFaculty of Mathematics and Computer ScienceFaculty of Math";
         $this->assertTrue(strlen($too_long_new_faculty_name) === 101);
-        $response = $this->asUserRole('S')->patchJson('/faculties/'.$faculty_code_to_modify,
+        $response = $this->asUserRole(UserType::Student)->patchJson('/faculties/'.$faculty_code_to_modify,
             [
                 "faculty_name" => $too_long_new_faculty_name
             ]
