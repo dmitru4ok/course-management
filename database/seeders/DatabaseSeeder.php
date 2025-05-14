@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
         $this->call(CourseOfferingSeeder::class);
         $this->call(TeachesSeeder::class);
         $this->call(AvailableInSeeder::class);
+        $this->call(CourseRegistrationSeeder::class);
         
         // $res = User::where('role', UserType::Professor)->with('coursesTaught')->get()->map( fn($user) => $user->coursesTaught->toArray());
         // dd($res);

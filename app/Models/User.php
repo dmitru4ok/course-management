@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -36,9 +37,12 @@ class User extends Authenticatable implements JWTSubject
         return [ 'role' => $this->role ];
     }
 
-    public function studyProgram() {
-        return StudyProgram::query()
-            ->where('program_code', $this->program_code)->first();
+    public function studyProgram(): BelongsTo  {
+        return $this->belongsTo(
+            \App\Models\StudyProgram::class,
+            'program_code',
+            'program_code'
+        );
     }
 
     // for professors

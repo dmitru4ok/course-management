@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\AvailableIn;
 use App\Models\CourseOffering;
 use App\Models\Semester;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class AvailableInSeeder extends Seeder

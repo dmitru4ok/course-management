@@ -20,6 +20,6 @@
 
 **Teaches**(<ins>*offering_id*, *prof_id*</ins>) **DONE**
 
-**AvailableIn**(<ins>*offering_id*, *sem_no*, *year_started*, *program_code*</ins>)
+**AvailableIn**(<ins>*offering_id*, *sem_no*, *year_started*, *program_code*</ins>) **DONE**
 
-**CourseRegistration**(<ins>*stud_id*, *offering_id*, *program_code*, *year_started*</ins>, reg_date, is_compulsory)
+**CourseRegistration**(<ins>*stud_id*, *offering_id*, *program_code*, *sem_no* ,*year_started*</ins>, reg_date, is_compulsory) **DONE** (no seeder)
