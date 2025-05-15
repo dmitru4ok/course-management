@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthContext, LoginForm } from '../models/Auth.models';
+import { LoginForm } from '../models/Auth.models';
 import { Router, RouterModule } from '@angular/router';
 
 @Component({
@@ -32,13 +32,4 @@ export class LoginComponent {
       }
     });
   }
-
-  handleLogout() {
-    this.auth.logout().subscribe(
-      () => {
-        this.router.navigate(['login']);
-      }
-    );
-  }
-
 }

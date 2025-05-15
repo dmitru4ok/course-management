@@ -26,10 +26,16 @@ export class AuthService {
     );
   }
 
+  public getToken() {
+    return this.context?.access_token;
+  }
+
   public logout(): Observable<any> {
     return this.http.post(`${this.APIURL}/logout`, {})
     .pipe(
       tap(response => {
+        this.authState$.next(null);
+        this.context = null;
         console.log(response)
       })
     );

@@ -17,7 +17,7 @@
       <nav class="hidden md:flex space-x-8">
         <a class="text-gray-600 hover:text-gray-900">Home</a>
         @if (auth.authentication$ | async;) {
-          <a class="text-gray-600 hover:text-gray-900">logout</a>
+          <a (click)="logout()" class="text-gray-600 hover:text-gray-900">Logout</a>
         }
 
       </nav>
