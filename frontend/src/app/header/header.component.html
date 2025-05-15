@@ -1,0 +1,44 @@
+<header class="bg-white shadow-md">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+
+      @if (auth.authentication$ | async; as user ) {
+        <div class="flex-shrink-0">
+          <a href="#" class="text-xl font-bold text-gray-800">{{user.name}} {{user.surname}}</a>
+        </div>
+      }
+      <!-- @else {
+        <div class="flex-shrink-0">
+          <a href="#" class="text-xl font-bold text-gray-800">MyLogo</a>
+        </div>
+      } -->
+
+
+      <nav class="hidden md:flex space-x-8">
+        <a class="text-gray-600 hover:text-gray-900">Home</a>
+        @if (auth.authentication$ | async;) {
+          <a class="text-gray-600 hover:text-gray-900">logout</a>
+        }
+
+      </nav>
+
+      <div class="md:hidden">
+        <button (click)="toggleMenu()" class="text-gray-600 hover:text-gray-900 focus:outline-none">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  @if (isMenuOpen) {
+    <div class="md:hidden px-4 pt-2 pb-4 space-y-1 bg-white border-t">
+    <a href="#" class="block text-gray-600 hover:text-gray-900">Home</a>
+    <a href="#" class="block text-gray-600 hover:text-gray-900">About</a>
+    <a href="#" class="block text-gray-600 hover:text-gray-900">Services</a>
+    <a href="#" class="block text-gray-600 hover:text-gray-900">Contact</a>
+  </div>
+  }
+</header>
