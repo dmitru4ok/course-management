@@ -5,7 +5,7 @@ import { UserRole } from './models/Auth.models';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { isAllowedRoleGuard } from './guards/auth.guard';
 import { redirectGuard } from './guards/redirect.guard';
-import { CourseComponent } from './course/course.component';
+import { CourseComponent } from './course/course_blueprint.component';
 
 export const routes: Routes = [
 
