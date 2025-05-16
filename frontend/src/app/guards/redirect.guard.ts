@@ -23,9 +23,8 @@ export const redirectGuard: CanActivateFn = (route, state) => {
     }
 
     default: {
-      router.navigate(['/login']);
+      router.navigate(['login']);
     }
   }
-
-  return false;
+  return true;
 };
