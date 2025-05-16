@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CourseBlueprintController;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\FacultyController;
 use App\Http\Controllers\SemesterController;
@@ -31,6 +32,14 @@ Route::middleware('auth:api')->group(function() {
         Route::get('/semesters/{program}/{year}', 'show');
         Route::post('/semesters', 'store')->middleware('role:A');
         Route::put('/semesters/{program}/{year}', 'update')->middleware('role:A');
+    });
+
+    Route::controller(CourseBlueprintController::class)->group(function() {
+        Route::get('/course_blueprints', 'index');
+        Route::get('/course_blueprints/{code}', 'show');
+        Route::post('/course_blueprints', 'store')->middleware('role:A');
+        Route::put('/course_blueprints/{code}', 'update')->middleware('role:A');
+        Route::delete('/course_blueprints/{code}', 'invalidate')->middleware('role:A');
     });
 
     Route::controller(StudyProgramController::class)->group(function() { // testing
