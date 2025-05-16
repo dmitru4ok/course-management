@@ -13,7 +13,12 @@ export class AuthService {
   private readonly authState$ = new BehaviorSubject<User|null>(null);
   authentication$ = this.authState$.asObservable();
 
-  constructor(private readonly http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {
+    this.context = this.getFromLocalStorage();
+    if (this.context) {
+      this.authState$.next(this.context?.user);
+    }
+  }
 
   public login(credentials: LoginForm): Observable<AuthContext> {
     return this.http.post<AuthContext>(`${this.APIURL}/login`, credentials)
@@ -22,6 +27,7 @@ export class AuthService {
         console.log(response);
         this.context = response;
         this.authState$.next(this.context.user);
+        this.writeToLocalStorage();
       })
     );
   }
@@ -30,13 +36,29 @@ export class AuthService {
     return this.context?.access_token;
   }
 
+  public getRole() {
+    return this.context?.user.role;
+  }
+
+  public writeToLocalStorage() {
+    localStorage.setItem('authContext', JSON.stringify(this.context));
+  }
+
+  public clearLocalStorage() {
+    localStorage.removeItem('authContext');
+  }
+
+  public getFromLocalStorage() {
+    return JSON.parse(localStorage.getItem('authContext')!);
+  }
+
   public logout(): Observable<any> {
     return this.http.post(`${this.APIURL}/logout`, {})
     .pipe(
-      tap(response => {
+      tap(() => {
         this.authState$.next(null);
         this.context = null;
-        console.log(response)
+        this.clearLocalStorage();
       })
     );
   }

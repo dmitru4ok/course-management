@@ -12,7 +12,5 @@ import { HeaderComponent } from "./header/header.component";
 })
 export class AppComponent {
   title = 'mgm_app';
-  constructor(readonly auth: AuthService) {
-    // auth.login();
-  }
+  constructor(readonly auth: AuthService) {}
 }

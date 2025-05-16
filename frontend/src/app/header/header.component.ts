@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { AsyncPipe } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
+import { UserRole } from '../models/Auth.models';
 
 @Component({
   selector: 'app-header',
@@ -12,15 +13,11 @@ import { Router, RouterModule } from '@angular/router';
 })
 export class HeaderComponent {
   constructor(protected readonly auth: AuthService, private readonly router: Router) {}
-  isMenuOpen = false;
-
-  toggleMenu(): void {
-    this.isMenuOpen = !this.isMenuOpen;
-  }
+  UserRole = UserRole;
 
   logout() {
-    this.auth.logout().subscribe(() =>{
-      this.router.navigate(['login']);
+    this.auth.logout().subscribe(() => {
+      this.router.navigate(['/login']);
     });
   }
 }
