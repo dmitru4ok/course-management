@@ -27,9 +27,10 @@ export class DataService {
     return null;
   }
 
-  public patchCourseBlueprint(course: CourseBluepint) {
-    if (course.course_code) {
-      // return this.http.patch()
+  public editCourseBlueprint(id: number, course: CourseBluepint) {
+    if (course) {
+      return this.http.put<CourseBluepint>(`${this.APIURL}/course_blueprints/${id}`, course);
     }
+    return null;
   }
 }
