@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CourseBlueprint;
 use Illuminate\Http\Request;
+use League\CommonMark\Extension\CommonMark\Node\Inline\Code;
 
 class CourseBlueprintController extends Controller
 {
@@ -56,9 +57,26 @@ class CourseBlueprintController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, CourseBlueprint $courseBlueprint)
+    public function update(Request $request, int $code)
     {
-        //
+        $validated = $request->validate([
+            'course_name' => 'required|string|max:100',
+            'credit_weight' => 'required|integer|max:255|min:1',
+            'is_valid' => 'required|boolean',
+            'faculty_code' => 'required|string|max:3|exists:faculties,faculty_code',
+        ]);
+        
+        $courseBlueprint = CourseBlueprint::find($code);
+        if (is_null($courseBlueprint)) {
+            return response()->json(['message' => 'Course blueprint not found'], 404);
+        }
+
+        $courseBlueprint->course_name = $validated['course_name'];
+        $courseBlueprint->credit_weight = $validated['credit_weight'];
+        $courseBlueprint->is_valid = $validated['is_valid'];
+        $courseBlueprint->faculty_code = $validated['faculty_code'];
+        $courseBlueprint->save();
+        return response($courseBlueprint, 201);
     }
 
     /**
