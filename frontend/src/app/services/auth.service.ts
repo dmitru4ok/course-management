@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthContext, LoginForm, User } from '../models/Auth.models';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, of, tap } from 'rxjs';
 import { environment } from '../../environments/environment.development';
 
 @Injectable({
@@ -55,6 +55,12 @@ export class AuthService {
   public logout(): Observable<any> {
     return this.http.post(`${this.APIURL}/logout`, {})
     .pipe(
+      catchError(() => {
+        this.authState$.next(null);
+        this.context = null;
+        this.clearLocalStorage();
+        return of('error')
+      }),
       tap(() => {
         this.authState$.next(null);
         this.context = null;

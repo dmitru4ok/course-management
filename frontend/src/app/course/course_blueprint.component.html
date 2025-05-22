@@ -1,0 +1,185 @@
+<div class="flex h-[calc(100vh-4rem)]">
+  <div
+    class="w-1/2 overflow-y-auto border-r border-gray-200 p-4 space-y-4 bg-white"
+  >
+    @for (course of courses | courseFilter:searchQuery; track $index) {
+    <div
+      [ngClass]="{
+        'bg-red-100': !course.is_valid,
+        'bg-white': course.is_valid
+      }"
+      class="p-4 rounded-lg shadow hover:shadow-md transition"
+    >
+      <div class="flex justify-between items-center">
+        <div>
+          <h3 class="text-lg font-semibold text-gray-800">
+            {{ course.course_name }}
+          </h3>
+          <p class="text-sm text-gray-600">
+            Credits: {{ course.credit_weight }}
+          </p>
+          <a
+            [routerLink]="['/faculty', course.faculty_code]"
+            class="text-blue-600 hover:underline text-sm"
+          >
+            Faculty: {{ course.faculty_code }}
+          </a>
+        </div>
+        <div class="space-x-2">
+          <button
+            (click)="onEdit(course)"
+            class="text-sm px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            Edit
+          </button>
+          @if (course.is_valid) {
+          <button
+            (click)="onInvalidate(course)"
+            class="text-sm px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+          >
+            Invalidate
+          </button>
+          }
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+
+  <div class="w-1/2 p-6 bg-gray-50">
+    <div class="space-y-4 mb-8">
+      <h2 class="text-xl font-bold text-gray-800">Filter Courses</h2>
+      <div class="space-y-4">
+        <input
+          [(ngModel)]="searchQuery.name"
+          type="text"
+          placeholder="Search by name"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+        />
+
+        <input
+          [(ngModel)]="searchQuery.credits"
+          type="number"
+          placeholder="0"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+        />
+
+        <select
+          [(ngModel)]="searchQuery.faculty"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+        >
+          <option value="">All Faculties</option>
+          @for (faculty of faculties; track $index) {
+          <option [value]="faculty.faculty_code">
+            {{ faculty.faculty_name }}
+          </option>
+          }
+        </select>
+
+        <select
+          [(ngModel)]="searchQuery.validity"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+        >
+          <option value="">All Statuses</option>
+          <option value="active">Active</option>
+          <option value="invalid">Invalid</option>
+        </select>
+      </div>
+    </div>
+    <div class="space-y-4 mb-8">
+      @if (selectedCourse) {
+        <h2 class="text-xl font-bold text-gray-800">Edit course</h2>
+      <form [formGroup]="editForm" (ngSubmit)="onSave()" class="space-y-4">
+        <div>
+          <label
+            for="course_name"
+            class="block text-sm font-medium text-gray-700"
+          >
+            Course Name
+          </label>
+          <input
+            id="course_name"
+            formControlName="course_name"
+            type="text"
+            [ngClass]="{
+              'mt-1 rounded-md shadow-sm border-gray-300 focus:ring-indigo-500 focus:border-indigo-500':
+                editForm.get('course_name')?.valid ||
+                editForm.get('course_name')?.pristine,
+              'border-red-500 focus:ring-red-500 focus:border-red-500 bg-red-50':
+                editForm.get('course_name')?.invalid &&
+                editForm.get('course_name')?.touched
+            }"
+            class="mt-1 block w-full rounded-md shadow-sm px-3 py-2 sm:text-sm"
+          />
+        </div>
+
+        <div>
+          <label
+            for="credit_weight"
+            class="block text-sm font-medium text-gray-700"
+            >Credits</label
+          >
+          <input
+            id="credit_weight"
+            formControlName="credit_weight"
+            type="number"
+            [ngClass]="{
+              'mt-1 block rounded-md shadow-sm border-gray-300 focus:ring-indigo-500 focus:border-indigo-500':
+                editForm.get('credit_weight')?.valid ||
+                editForm.get('credit_weight')?.pristine,
+              'border-red-500 focus:ring-red-500 focus:border-red-500 bg-red-50':
+                editForm.get('credit_weight')?.invalid &&
+                editForm.get('credit_weight')?.touched
+            }"
+            class="mt-1 block w-full rounded-md shadow-sm px-3 py-2 sm:text-sm"
+          />
+        </div>
+
+        <div>
+          <label
+            for="faculty_code"
+            class="block text-sm font-medium text-gray-700"
+            >Faculty</label
+          >
+          <select
+            id="faculty_code"
+            formControlName="faculty_code"
+            [ngClass]="{
+              'mt-1 block rounded-md shadow-sm border-gray-300 focus:ring-indigo-500 focus:border-indigo-500':
+                editForm.get('faculty_code')?.valid ||
+                editForm.get('faculty_code')?.pristine,
+              'border-red-500 focus:ring-red-500 focus:border-red-500 bg-red-50':
+                editForm.get('faculty_code')?.invalid &&
+                editForm.get('faculty_code')?.touched
+            }"
+            class="mt-1 block w-full rounded-md shadow-sm px-3 py-2 sm:text-sm"
+          >
+            @for (faculty of faculties; track $index) {
+            <option [value]="faculty.faculty_code">
+              {{ faculty.faculty_name }}
+            </option>
+            }
+          </select>
+        </div>
+        <div class="flex space-x-4">
+          <button
+            type="submit"
+            [disabled]="editForm.invalid"
+            class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 disabled:opacity-50"
+          >
+            Save Changes
+          </button>
+
+          <button
+            type="button"
+            (click)="cancelEdit()"
+            class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+      }
+    </div>
+  </div>
+</div>
