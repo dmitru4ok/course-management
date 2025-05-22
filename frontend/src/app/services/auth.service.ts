@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { AuthContext, LoginForm, User } from '../models/Auth.models';
 import { BehaviorSubject, catchError, Observable, of, tap } from 'rxjs';
 import { environment } from '../../environments/environment.development';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -13,10 +14,12 @@ export class AuthService {
   private readonly authState$ = new BehaviorSubject<User|null>(null);
   authentication$ = this.authState$.asObservable();
 
-  constructor(private readonly http: HttpClient) {
+  constructor(private readonly http: HttpClient, private readonly router: Router) {
     this.context = this.getFromLocalStorage();
     if (this.context) {
       this.authState$.next(this.context?.user);
+    } else {
+      this.router.navigate(['login']);
     }
   }
 
@@ -52,20 +55,21 @@ export class AuthService {
     return JSON.parse(localStorage.getItem('authContext')!);
   }
 
+  public logoutLocal() {
+    this.authState$.next(null);
+    this.context = null;
+    this.clearLocalStorage();
+    this.router.navigate(['login']);
+  }
+
   public logout(): Observable<any> {
     return this.http.post(`${this.APIURL}/logout`, {})
     .pipe(
       catchError(() => {
-        this.authState$.next(null);
-        this.context = null;
-        this.clearLocalStorage();
-        return of('error')
+        this.logoutLocal();
+        return of(null)
       }),
-      tap(() => {
-        this.authState$.next(null);
-        this.context = null;
-        this.clearLocalStorage();
-      })
+      tap(() => this.logoutLocal())
     );
   }
 }
