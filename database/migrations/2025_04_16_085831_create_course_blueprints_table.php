@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('course_name', 100);
             $table->tinyInteger('credit_weight', false, true);
             $table->boolean('is_valid');
+            $table->string('syllabus_pdf')->nullable();
             $table->char('faculty_code', 3);
             $table->foreign('faculty_code')->references('faculty_code')->on('faculties')->onDelete('cascade');
         });

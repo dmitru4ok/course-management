@@ -37,8 +37,9 @@ Route::middleware('auth:api')->group(function() {
     Route::controller(CourseBlueprintController::class)->group(function() {
         Route::get('/course_blueprints', 'index');
         Route::get('/course_blueprints/{code}', 'show');
+        Route::get('/course_blueprint/{code}/syllabus', 'blueprint_pdf');
         Route::post('/course_blueprints', 'store')->middleware('role:A');
-        Route::put('/course_blueprints/{code}', 'update')->middleware('role:A');
+        Route::put('/course_blueprints/{code}', 'update')->middleware('role:A')->name('course_blueprint.update');
         Route::delete('/course_blueprints/{code}', 'invalidate')->middleware('role:A');
     });
 
