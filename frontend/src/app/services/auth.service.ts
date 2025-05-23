@@ -19,7 +19,7 @@ export class AuthService {
     if (this.context) {
       this.authState$.next(this.context?.user);
     } else {
-      this.router.navigate(['login']);
+      this.logoutLocal();
     }
   }
 
