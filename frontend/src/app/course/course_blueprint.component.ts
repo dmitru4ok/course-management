@@ -132,6 +132,13 @@ export class CourseComponent implements OnInit {
     }
   }
 
+  openSyllabus(id: number) {
+    this.data.getSyllabus(id).subscribe(blob => {
+      const url = window.URL.createObjectURL(blob);
+      window.open(url, '_blank');
+    });
+  }
+
   onCreateSave() {
     const fd = new FormData();
     for (let key in this.editForm.value) {

@@ -37,4 +37,8 @@ export class DataService {
   public createCourseBlueprint(data: FormData) {
     return this.http.post<CourseBluepint>(`${this.APIURL}/course_blueprints`,data);
   }
+
+  public getSyllabus(id: number) {
+    return this.http.get(`${this.APIURL}/course_blueprint/${id}/syllabus`, {responseType: 'blob'});
+  }
 }

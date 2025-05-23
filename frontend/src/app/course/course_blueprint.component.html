@@ -16,6 +16,11 @@
           <a [routerLink]="['/faculty', course.faculty_code]" class="text-blue-600 hover:underline text-sm">
             Faculty: {{ course.faculty_code }}
           </a>
+          @if (course.has_syllabus_pdf) {
+            <a (click)="openSyllabus(course.course_code)" class="text-blue-600 cursor-pointer block hover:underline text-sm">
+              Get Syllabus
+            </a>
+          }
         </div>
         <div class="space-x-2">
           <button
