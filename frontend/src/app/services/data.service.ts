@@ -33,4 +33,8 @@ export class DataService {
     }
     return null;
   }
+
+  public createCourseBlueprint(data: FormData) {
+    return this.http.post<CourseBluepint>(`${this.APIURL}/course_blueprints`,data);
+  }
 }

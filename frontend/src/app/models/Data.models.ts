@@ -3,7 +3,8 @@ export interface CourseBluepint {
     course_name: string,
     credit_weight: number,
     is_valid: boolean,
-    faculty_code: string
+    faculty_code: string,
+    has_syllabus_pdf: boolean
 }
 
 export interface Faculty {

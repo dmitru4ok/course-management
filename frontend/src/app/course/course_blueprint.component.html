@@ -1,15 +1,10 @@
 <div class="flex h-[calc(100vh-4rem)]">
-  <div
-    class="w-1/2 overflow-y-auto border-r border-gray-200 p-4 space-y-4 bg-white"
-  >
+
+    <div class="w-1/2 overflow-y-auto border-r border-gray-200 p-4 space-y-4 bg-white">
     @for (course of courses | courseFilter:searchQuery; track $index) {
     <div
-      [ngClass]="{
-        'bg-red-100': !course.is_valid,
-        'bg-white': course.is_valid
-      }"
-      class="p-4 rounded-lg shadow hover:shadow-md transition"
-    >
+      [ngClass]="{'bg-red-100': !course.is_valid,'bg-white': course.is_valid}"
+      class="p-4 rounded-lg shadow hover:shadow-md transition">
       <div class="flex justify-between items-center">
         <div>
           <h3 class="text-lg font-semibold text-gray-800">
@@ -18,24 +13,20 @@
           <p class="text-sm text-gray-600">
             Credits: {{ course.credit_weight }}
           </p>
-          <a
-            [routerLink]="['/faculty', course.faculty_code]"
-            class="text-blue-600 hover:underline text-sm"
-          >
+          <a [routerLink]="['/faculty', course.faculty_code]" class="text-blue-600 hover:underline text-sm">
             Faculty: {{ course.faculty_code }}
           </a>
         </div>
         <div class="space-x-2">
           <button
             (click)="onEdit(course)"
-            class="text-sm px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
-          >
+            class="text-sm cursor-pointer px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">
             Edit
           </button>
           @if (course.is_valid) {
           <button
             (click)="onInvalidate(course)"
-            class="text-sm px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+            class="text-sm cursor-pointer px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
           >
             Invalidate
           </button>
@@ -47,7 +38,8 @@
   </div>
 
   <div class="w-1/2 p-6 bg-gray-50">
-    <div class="space-y-4 mb-8">
+    @if(state === 'view') {
+      <div class="space-y-4 mb-8">
       <h2 class="text-xl font-bold text-gray-800">Filter Courses</h2>
       <div class="space-y-4">
         <input
@@ -86,39 +78,40 @@
         </select>
       </div>
     </div>
-    <div class="space-y-4 mb-8">
-      @if (selectedCourse) {
-        <h2 class="text-xl font-bold text-gray-800">Edit course</h2>
-      <form [formGroup]="editForm" (ngSubmit)="onSave()" class="space-y-4">
-        <div>
-          <label
-            for="course_name"
-            class="block text-sm font-medium text-gray-700"
-          >
-            Course Name
-          </label>
-          <input
-            id="course_name"
-            formControlName="course_name"
-            type="text"
-            [ngClass]="{
-              'mt-1 rounded-md shadow-sm border-gray-300 focus:ring-indigo-500 focus:border-indigo-500':
-                editForm.get('course_name')?.valid ||
-                editForm.get('course_name')?.pristine,
-              'border-red-500 focus:ring-red-500 focus:border-red-500 bg-red-50':
-                editForm.get('course_name')?.invalid &&
-                editForm.get('course_name')?.touched
-            }"
-            class="mt-1 block w-full rounded-md shadow-sm px-3 py-2 sm:text-sm"
-          />
-        </div>
 
-        <div>
+     <div class="space-y-4 mb-8 flex flex-col justify-center items-center">
+      <h2 class="text-xl mb-6 font-bold text-gray-800">OR</h2>
+      <button (click)="switchToState('create')" class="bg-green-500 mx-8 inline-block cursor-pointer text-white px-2 py-2 rounded hover:bg-green-600 disabled:opacity-50">
+        Create new Blueprint
+      </button>
+    </div>
+    }
+
+    <div class="space-y-4 mb-8">
+      @if (selectedCourse && state === 'edit' || state === 'create') {
+        <h2 class="text-xl font-bold text-gray-800">{{ state === 'create' ? 'Create' : 'Edit' }} a course</h2>
+        <form [formGroup]="editForm" (ngSubmit)="onSave()" class="space-y-4">
+          <div>
+            <label
+              for="course_name"
+              class="block text-sm font-medium text-gray-700">
+              Course Name
+            </label>
+            <input id="course_name" formControlName="course_name" type="text"
+                [ngClass]="{
+                'mt-1 rounded-md shadow-sm border-gray-300 focus:ring-indigo-500 focus:border-indigo-500':
+                  editForm.get('course_name')?.valid ||
+                  editForm.get('course_name')?.pristine,
+                'border-red-500 focus:ring-red-500 focus:border-red-500 bg-red-50':
+                  editForm.get('course_name')?.invalid &&
+                  editForm.get('course_name')?.touched }"
+                class="mt-1 block w-full rounded-md shadow-sm px-3 py-2 sm:text-sm"
+              />
+            </div>
+          <div>
           <label
             for="credit_weight"
-            class="block text-sm font-medium text-gray-700"
-            >Credits</label
-          >
+            class="block text-sm font-medium text-gray-700">Credits</label>
           <input
             id="credit_weight"
             formControlName="credit_weight"
@@ -161,19 +154,22 @@
             }
           </select>
         </div>
+         @if (state === 'create') {
+          <app-file-upload (userSelectedFile)="attachFileToAForm($event)"></app-file-upload>
+        }
         <div class="flex space-x-4">
           <button
             type="submit"
             [disabled]="editForm.invalid"
-            class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 disabled:opacity-50"
+            class="bg-green-500 cursor-pointer text-white px-4 py-2 rounded hover:bg-green-600 disabled:opacity-50"
           >
-            Save Changes
+            {{state === 'edit' ? 'Save changes' : 'Create'}}
           </button>
 
           <button
             type="button"
             (click)="cancelEdit()"
-            class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
+            class="bg-gray-300 cursor-pointer text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
           >
             Cancel
           </button>

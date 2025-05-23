@@ -6,11 +6,14 @@ import { RouterLink } from '@angular/router';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CourseFilterPipe } from '../course-filter.pipe';
 import { switchMap, tap } from 'rxjs';
+import { FileUploadComponent } from "../file-upload/file-upload.component";
+
+type State = 'edit' | 'create' | 'view';
 
 @Component({
   selector: 'app-course',
   standalone: true,
-  imports: [NgClass, RouterLink, ReactiveFormsModule, FormsModule, CourseFilterPipe],
+  imports: [NgClass, RouterLink, ReactiveFormsModule, FormsModule, CourseFilterPipe, FileUploadComponent],
   templateUrl: './course_blueprint.component.html',
   styleUrl: './course_blueprint.component.css'
 })
@@ -19,6 +22,7 @@ export class CourseComponent implements OnInit {
   protected faculties: Faculty[] = [];
   protected editForm!: FormGroup;
   protected selectedCourse: CourseBluepint | null = null;
+  protected state: State = 'view';
   searchQuery = {
     name: '',
     credits: 0,
@@ -41,9 +45,29 @@ export class CourseComponent implements OnInit {
     this.editForm = new FormGroup({
       course_name: new FormControl(null, [Validators.required, Validators.maxLength(100)]),
       credit_weight: new FormControl(null, [Validators.required, Validators.min(0), Validators.max(255)]),
-      is_valid: new FormControl(false, Validators.required),
-      faculty_code: new FormControl(null, [Validators.required, Validators.maxLength(3)])
+      is_valid: new FormControl('1', Validators.required),
+      faculty_code: new FormControl(null, [Validators.required, Validators.maxLength(3)]),
+      syllabus_pdf: new FormControl(null)
     });
+  }
+
+  createNewCourseBlueprint() {
+    const fd = new FormData();
+    for (let key in this.editForm.value) {
+      console.log(key, this.editForm.value[key]);
+      fd.append(key, this.editForm.value[key]);
+    }
+  }
+
+  switchToState(state: State) {
+    this.state = state;
+  }
+
+  attachFileToAForm(file: File) {
+    this.editForm.patchValue({
+      'syllabus_pdf': file
+    });
+    console.log(this.editForm.value);
   }
 
   onEdit(course: CourseBluepint) {
@@ -52,12 +76,12 @@ export class CourseComponent implements OnInit {
         this.faculties = resp;
         this.selectedCourse = course;
         this.editForm.patchValue(this.selectedCourse);
-        console.log(this.editForm.value);
+        this.switchToState('edit');
       });
     } else {
       this.selectedCourse = course;
       this.editForm.patchValue(this.selectedCourse);
-      console.log(this.editForm.value);
+      this.switchToState('edit');
     }
 
   }
@@ -71,27 +95,51 @@ export class CourseComponent implements OnInit {
     }
   }
 
-  onSave() {
+  onEditSave() {
     console.log(this.selectedCourse, this.editForm.value);
     let respObservable;
     if (this.selectedCourse) {
       respObservable = this.data.editCourseBlueprint(this.selectedCourse.course_code, this.editForm.value);
-    } else{
+    } else {
       return;
     }
-
-    console.log(respObservable);
     if (respObservable) {
       respObservable.subscribe((data) => {
         console.log(data);
         const ind = this.courses.findIndex( elem => elem.course_code === this.selectedCourse!.course_code);
         this.courses[ind] = data;
       });
+      this.selectedCourse = null;
+    }
+    this.switchToState('view');
+    this.editForm.reset({is_valid: '1'});
+  }
+
+  onSave() {
+    if (this.state === 'edit') {
+      this.onEditSave();
+    } else {
+      this.onCreateSave();
     }
   }
 
+  onCreateSave() {
+    const fd = new FormData();
+    for (let key in this.editForm.value) {
+      console.log(key, this.editForm.value[key]);
+      if (this.editForm.value[key]) {
+        fd.append(key, this.editForm.value[key]);
+      }
+    }
+    this.data.createCourseBlueprint(fd).subscribe((blueprint) => {
+      this.courses.push(blueprint);
+      this.switchToState('view');
+    });
+  }
+
   cancelEdit() {
-    this.editForm.reset();
+    this.editForm.reset({is_valid: '1'});
+    this.switchToState('view');
     this.selectedCourse = null;
   }
 }
