@@ -1,7 +1,7 @@
 import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { AuthService } from './services/auth.service';
-import { catchError, of, throwError } from 'rxjs';
+import { catchError, throwError } from 'rxjs';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const auth = inject(AuthService);
@@ -12,7 +12,9 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     : req;
   return next(authReq).pipe(
     catchError((err: HttpErrorResponse) => {
-      auth.logoutLocal();
+      if (err.status === 401) {
+        auth.logoutLocal();
+      }
       return throwError(() => err);
     })
   );

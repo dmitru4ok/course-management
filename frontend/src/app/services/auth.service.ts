@@ -27,7 +27,6 @@ export class AuthService {
     return this.http.post<AuthContext>(`${this.APIURL}/login`, credentials)
     .pipe(
       tap(response => {
-        console.log(response);
         this.context = response;
         this.authState$.next(this.context.user);
         this.writeToLocalStorage();

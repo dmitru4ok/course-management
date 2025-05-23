@@ -35,8 +35,10 @@ export class CourseComponent implements OnInit {
     this.data.getCourseBluepints().
     pipe(
       switchMap((course_blueprint) => {
-         this.courses = course_blueprint;
-         return this.data.getFaculties();
+
+        this.courses = course_blueprint;
+        console.log(this.courses);
+        return this.data.getFaculties();
       }),
       tap((f) => this.faculties = f)
     ).
@@ -45,7 +47,7 @@ export class CourseComponent implements OnInit {
     this.editForm = new FormGroup({
       course_name: new FormControl(null, [Validators.required, Validators.maxLength(100)]),
       credit_weight: new FormControl(null, [Validators.required, Validators.min(0), Validators.max(255)]),
-      is_valid: new FormControl('1', Validators.required),
+      is_valid: new FormControl(true, Validators.required),
       faculty_code: new FormControl(null, [Validators.required, Validators.maxLength(3)]),
       syllabus_pdf: new FormControl(null)
     });
@@ -54,8 +56,15 @@ export class CourseComponent implements OnInit {
   createNewCourseBlueprint() {
     const fd = new FormData();
     for (let key in this.editForm.value) {
-      console.log(key, this.editForm.value[key]);
-      fd.append(key, this.editForm.value[key]);
+      if (key === 'is_valid') {
+        if (this.editForm.value[key] === true || this.editForm.value[key] === '1' || this.editForm.value[key] === 'true') {
+          fd.append('is_valid', 'true');
+        } else if (this.editForm.value[key] === false || this.editForm.value[key] === '0' || this.editForm.value[key] === 'false') {
+          fd.append('is_valid', 'false');
+        }
+      } else {
+        fd.append(key, this.editForm.value[key]);
+      }
     }
   }
 
@@ -71,19 +80,10 @@ export class CourseComponent implements OnInit {
   }
 
   onEdit(course: CourseBluepint) {
-    if (this.faculties.length === 0) {
-      this.data.getFaculties().subscribe((resp) => {
-        this.faculties = resp;
-        this.selectedCourse = course;
-        this.editForm.patchValue(this.selectedCourse);
-        this.switchToState('edit');
-      });
-    } else {
-      this.selectedCourse = course;
-      this.editForm.patchValue(this.selectedCourse);
-      this.switchToState('edit');
-    }
-
+    this.selectedCourse = course;
+    this.editForm.patchValue(this.selectedCourse);
+    console.log(this.selectedCourse);
+    this.switchToState('edit');
   }
 
   onInvalidate(course: CourseBluepint) {
@@ -99,6 +99,14 @@ export class CourseComponent implements OnInit {
     console.log(this.selectedCourse, this.editForm.value);
     let respObservable;
     if (this.selectedCourse) {
+      const val = this.editForm.value['is_valid'];
+      if (val === true || val === 'true' || val === '1') {
+        this.editForm.patchValue({'is_valid': 'true'});
+      } else if (val === false || val === 'false' || val === '0') {
+        this.editForm.patchValue({'is_valid': 'false'});
+      }
+
+
       respObservable = this.data.editCourseBlueprint(this.selectedCourse.course_code, this.editForm.value);
     } else {
       return;
@@ -108,11 +116,12 @@ export class CourseComponent implements OnInit {
         console.log(data);
         const ind = this.courses.findIndex( elem => elem.course_code === this.selectedCourse!.course_code);
         this.courses[ind] = data;
+        this.selectedCourse = null;
       });
-      this.selectedCourse = null;
+
     }
     this.switchToState('view');
-    this.editForm.reset({is_valid: '1'});
+    this.editForm.reset({is_valid: true});
   }
 
   onSave() {
@@ -138,7 +147,7 @@ export class CourseComponent implements OnInit {
   }
 
   cancelEdit() {
-    this.editForm.reset({is_valid: '1'});
+    this.editForm.reset({is_valid: true});
     this.switchToState('view');
     this.selectedCourse = null;
   }
