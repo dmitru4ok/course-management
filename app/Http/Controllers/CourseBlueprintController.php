@@ -18,7 +18,7 @@ class CourseBlueprintController extends Controller
     public function store(CourseBlueprintRequest $request)
     {   
         $validated = $request->validated();
-        $validated['is_valid'] = boolval($validated['is_valid']);
+        $validated['is_valid'] = $validated['is_valid'] === 'true' ? true : false;
         if ($request->hasFile('syllabus_pdf')) {
             $validated['syllabus_pdf'] = $request->file('syllabus_pdf')->store('course_offering_blobs');
         }
@@ -58,7 +58,7 @@ class CourseBlueprintController extends Controller
 
         $courseBlueprint->course_name = $validated['course_name'];
         $courseBlueprint->credit_weight = $validated['credit_weight'];
-        $courseBlueprint->is_valid = $validated['is_valid'];
+        $courseBlueprint->is_valid = $validated['is_valid'] === 'true' ? true : false;
         $courseBlueprint->faculty_code = $validated['faculty_code'];
         $courseBlueprint->save();
         return response($courseBlueprint, 201);

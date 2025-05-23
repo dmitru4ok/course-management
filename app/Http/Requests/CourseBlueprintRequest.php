@@ -32,8 +32,8 @@ class CourseBlueprintRequest extends FormRequest
         return [
             'course_name' => 'required|string|max:100',
             'credit_weight' => 'required|integer|max:255|min:1',
-            'is_valid' => 'required|boolean',
-            'syllabus_pdf' => 'file|mimes:pdf|mimetypes:application/pdf,pdf|max:2048', // 2MB
+            'is_valid' => 'required|string|in:true,false',
+            'syllabus_pdf' => 'nullable|file|mimes:pdf|mimetypes:application/pdf,pdf|max:2048', // 2MB
             'faculty_code' => 'required|string|max:3|exists:faculties,faculty_code',
         ];
     }
