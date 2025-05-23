@@ -4,37 +4,38 @@ namespace App\Http\Controllers;
 
 use App\Models\CourseBlueprint;
 use Illuminate\Http\Request;
+use App\Http\Requests\CourseBlueprintRequest;
 use League\CommonMark\Extension\CommonMark\Node\Inline\Code;
+use Illuminate\Support\Facades\Storage;
 
 class CourseBlueprintController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         return CourseBlueprint::all();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    public function store(CourseBlueprintRequest $request)
+    {   
+        $validated = $request->validated();
+        $validated['is_valid'] = boolval($validated['is_valid']);
+        if ($request->hasFile('syllabus_pdf')) {
+            $validated['syllabus_pdf'] = $request->file('syllabus_pdf')->store('course_offering_blobs');
+        }
+        return CourseBlueprint::create($validated);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+    public function blueprint_pdf(int $code) {
+        $course_found = CourseBlueprint::find($code);
+        if (!is_null($course_found)) {
+            if (is_null($course_found->syllabus_pdf)) {
+                return response()->json(['message' => 'No file associated with this course'], 404);
+            }
+            return Storage::download($course_found->syllabus_pdf);
+        }
+        return response()->json(['message' => 'No course found'], 404);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(int $code)
     {
         $courseBlueprint = CourseBlueprint::find($code);
@@ -46,25 +47,9 @@ class CourseBlueprintController extends Controller
         return $courseBlueprint;
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(CourseBlueprint $courseBlueprint)
+    public function update(CourseBlueprintRequest $request, int $code)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, int $code)
-    {
-        $validated = $request->validate([
-            'course_name' => 'required|string|max:100',
-            'credit_weight' => 'required|integer|max:255|min:1',
-            'is_valid' => 'required|boolean',
-            'faculty_code' => 'required|string|max:3|exists:faculties,faculty_code',
-        ]);
+        $validated = $request->validated();
         
         $courseBlueprint = CourseBlueprint::find($code);
         if (is_null($courseBlueprint)) {
@@ -79,9 +64,6 @@ class CourseBlueprintController extends Controller
         return response($courseBlueprint, 201);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function invalidate(int $code)
     {
         $courseBlueprint = CourseBlueprint::find($code);

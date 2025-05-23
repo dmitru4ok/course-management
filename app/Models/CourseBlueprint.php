@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 
 class CourseBlueprint extends Model
 {
@@ -11,9 +12,27 @@ class CourseBlueprint extends Model
     protected $fillable = [
         'course_name',
         'credit_weight',
-        'is_active',
-        'faculty_code'
+        'is_valid',
+        'faculty_code',
+        'syllabus_pdf'
     ];
+
+     protected $hidden = [
+        'syllabus_pdf',
+    ];
+
+    protected $appends = [
+        'has_syllabus_pdf',
+    ];
+
+    public function getHasSyllabusPdfAttribute(): bool
+    {
+        if (!$this->syllabus_pdf) {
+            return false;
+        }
+
+        return Storage::exists($this->syllabus_pdf);
+    }
 
     protected $primaryKey = 'course_code';
     protected $keyType = 'integer';
