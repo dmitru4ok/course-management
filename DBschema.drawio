@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram name="Page-1" id="ZFAcVRVE-hqpHr65Nv5H">
-        <mxGraphModel dx="783" dy="389" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+        <mxGraphModel dx="775" dy="471" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -571,17 +571,27 @@
                         <mxPoint x="150" y="110" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="33" value="" style="endArrow=none;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;labelBackgroundColor=none;fontColor=default;strokeColor=#09555B;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="Cuksicx7Q6Ttsj1FzyHK-151" target="36">
+                <mxCell id="33" value="" style="endArrow=none;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;labelBackgroundColor=none;fontColor=default;strokeColor=#09555B;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="Cuksicx7Q6Ttsj1FzyHK-151" target="36" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="802.250000000003" y="450.0000000000001" as="sourcePoint"/>
                         <mxPoint x="790" y="440" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="34" value="building" style="ellipse;whiteSpace=wrap;html=1;align=center;labelBackgroundColor=none;fillColor=#FAD9D5;strokeColor=#D0CEE2;fontColor=#1A1A1A;" vertex="1" parent="1">
+                <mxCell id="34" value="building" style="ellipse;whiteSpace=wrap;html=1;align=center;labelBackgroundColor=none;fillColor=#FAD9D5;strokeColor=#D0CEE2;fontColor=#1A1A1A;" parent="1" vertex="1">
                     <mxGeometry x="711.5" y="441.5" width="62" height="28" as="geometry"/>
                 </mxCell>
-                <mxCell id="36" value="classroom" style="ellipse;whiteSpace=wrap;html=1;align=center;labelBackgroundColor=none;fillColor=#FAD9D5;strokeColor=#D0CEE2;fontColor=#1A1A1A;" vertex="1" parent="1">
+                <mxCell id="36" value="classroom" style="ellipse;whiteSpace=wrap;html=1;align=center;labelBackgroundColor=none;fillColor=#FAD9D5;strokeColor=#D0CEE2;fontColor=#1A1A1A;" parent="1" vertex="1">
                     <mxGeometry x="765" y="422" width="57" height="28" as="geometry"/>
+                </mxCell>
+                <mxCell id="37" value="syllabus_pdf" style="ellipse;whiteSpace=wrap;html=1;align=center;labelBackgroundColor=none;fillColor=#FAD9D5;strokeColor=#D0CEE2;fontColor=#1A1A1A;" vertex="1" parent="1">
+                    <mxGeometry x="739.5" y="530" width="82.5" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="38" value="" style="endArrow=none;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0;entryDx=0;entryDy=0;labelBackgroundColor=none;fontColor=default;strokeColor=#09555B;" edge="1" parent="1" source="37" target="Cuksicx7Q6Ttsj1FzyHK-130">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="678" y="505" as="sourcePoint"/>
+                        <mxPoint x="678" y="560" as="targetPoint"/>
+                        <Array as="points"/>
+                    </mxGeometry>
                 </mxCell>
             </root>
         </mxGraphModel>

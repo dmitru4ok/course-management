@@ -23,7 +23,7 @@ class FacultyController extends Controller
     }
 
     public function show(string $code)
-    {   
+    {
         $searched = Faculty::find($code);
         if (is_null($searched)) {
             return response()->json([

@@ -1,12 +1,13 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, NgClass } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { StudyProgram } from '../models/Data.models';
 import { DataService } from '../services/data.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-study-program',
   standalone: true,
-  imports: [DatePipe],
+  imports: [DatePipe, RouterLink, NgClass],
   templateUrl: './study-program.component.html',
   styleUrl: './study-program.component.css'
 })
