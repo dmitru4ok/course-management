@@ -12,7 +12,7 @@ class StudyProgramController extends Controller
     public static string $notFoundMessage = 'Not found';
     public function index()
     {
-        return StudyProgram::all();
+        return StudyProgram::with('instances')->get();
     }
 
     public function index_instances()

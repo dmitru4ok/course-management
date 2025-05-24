@@ -43,6 +43,14 @@ Route::middleware('auth:api')->group(function() {
         Route::delete('/course_blueprints/{code}', 'invalidate')->middleware('role:A');
     });
 
+    Route::controller(\App\Http\Controllers\CourseOfferingController::class)->group(function() {
+        Route::get('/course_offerings', 'index');
+        Route::get('/course_offerings/{id}', 'show');
+        Route::post('/course_offerings', 'store')->middleware('role:A');
+        Route::put('/course_offerings/{id}', 'update')->middleware('role:A');
+        Route::delete('/course_offerings/{id}', 'destroy')->middleware('role:A');
+    }); 
+
     Route::controller(StudyProgramController::class)->group(function() { // testing
         Route::get('/study_programs', 'index');
         Route::get('/study_programs/instances', 'index_instances');

@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\CourseBlueprint;
 use App\Models\CourseOffering;
 use Illuminate\Database\Seeder;
 

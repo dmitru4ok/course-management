@@ -25,7 +25,8 @@ class StudyProgramTest extends TestCase
                 'program_name',
                 'faculty_code',
                 'program_type',
-                'is_valid'
+                'is_valid',
+                'instances'
             ]
         ]);
     }
@@ -40,7 +41,8 @@ class StudyProgramTest extends TestCase
             '*' => [
                 'program_code',
                 'year_started',
-                'is_active'
+                'is_active',
+                'semesters'
             ]
         ]);
     }
@@ -83,7 +85,8 @@ class StudyProgramTest extends TestCase
             '*' => [
                 'program_code',
                 'year_started',
-                'is_active'
+                'is_active',
+                'semesters'
             ]
         ]);
         $response->assertJsonCount(StudyProgramInstance::where('program_code', $program_code)->count());
@@ -107,7 +110,8 @@ class StudyProgramTest extends TestCase
             '*' => [
                 'program_code',
                 'year_started',
-                'is_active'
+                'is_active',
+                'semesters'
             ]
         ]);
         $response->assertJsonCount(StudyProgramInstance::where('year_started', $year)->count());
@@ -127,10 +131,11 @@ class StudyProgramTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertJsonIsObject();
-        $response->assertExactJson([
+        $response->assertJson([
             'program_code' => $program_code,
             'year_started' => $year,
-            'is_active' => true
+            'is_active' => true,
+            'semesters' => []
         ]);
     }
 

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\Semester;
 
 class StudyProgramInstance extends Model
 {
@@ -17,8 +18,17 @@ class StudyProgramInstance extends Model
         'is_active'
     ];
 
-    public function semester(): HasMany {
-        return $this->hasMany(Semester::class, "program_code", "program_code")
-            ->where("year_started", $this->year_started); // PK is composite: program_code + year_started
+    protected $appends = [
+        'semesters'
+    ];
+
+    public function getSemestersAttribute() {
+        return $this->semesters();
+    }
+
+    public function semesters() {
+        return Semester::where('program_code', $this->program_code)
+            ->where('year_started', $this->year_started)
+            ->get();
     }
 }

@@ -20,7 +20,7 @@ class StudyProgram extends Model
     ];
 
     function instances() {
-        return $this->hasMany(StudyProgramInstance::class)->where('program_code', $this->program_code);
+        return $this->hasMany(StudyProgramInstance::class, 'program_code', 'program_code');
     }
 
     function faculty(): BelongsTo {
