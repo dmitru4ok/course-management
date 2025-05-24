@@ -6,6 +6,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { isAllowedRoleGuard } from './guards/auth.guard';
 import { redirectGuard } from './guards/redirect.guard';
 import { CourseComponent } from './course/course_blueprint.component';
+import { StudyProgramComponent } from './study-program/study-program.component';
 
 export const routes: Routes = [
 
@@ -16,6 +17,7 @@ export const routes: Routes = [
       {path: '', pathMatch: 'full', redirectTo: 'courses'},
       {path: 'courses', component: CourseComponent},
       {path: 'register', component: RegisterComponent},
+      {path: 'study-programs', component: StudyProgramComponent}
   ]},
 
   {path: 'student',
