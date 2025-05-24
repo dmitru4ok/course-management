@@ -39,6 +39,6 @@ export class DataService {
   }
 
   public getSyllabus(id: number) {
-    return this.http.get(`${this.APIURL}/course_blueprint/${id}/syllabus`, {responseType: 'blob'});
+    return this.http.get(`${this.APIURL}/course_blueprints/${id}/syllabus`, {responseType: 'blob'});
   }
 }
