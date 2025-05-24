@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
-import { CourseBluepint, Faculty, StudyProgram } from '../models/Data.models';
+import { CourseBluepint, Faculty, StudyProgram, StudyProgramInstance } from '../models/Data.models';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -42,7 +42,15 @@ export class DataService {
     return this.http.get(`${this.APIURL}/course_blueprints/${id}/syllabus`, {responseType: 'blob'});
   }
 
+  public getStudyProgramsNested() {
+    return this.http.get<StudyProgram[]>(`${this.APIURL}/study_programs_instances`);
+  }
+
   public getStudyPrograms() {
     return this.http.get<StudyProgram[]>(`${this.APIURL}/study_programs`);
+  }
+
+  public getStudyProgramInstances() {
+    return this.http.get<StudyProgramInstance[]>(`${this.APIURL}/study_programs`);
   }
 }

@@ -16,7 +16,7 @@ export class StudyProgramComponent implements OnInit {
   constructor(private readonly data: DataService) {}
 
   ngOnInit(): void {
-    this.data.getStudyPrograms().subscribe((data) => {
+    this.data.getStudyProgramsNested().subscribe((data) => {
       this.studyPrograms = data;
       this.initOpens();
 
@@ -26,8 +26,10 @@ export class StudyProgramComponent implements OnInit {
   initOpens() {
     for (let program of this.studyPrograms) {
       this.whoIsOpen[program.program_code] = {open: false, instances: {}};
-      for (let instance of program.instances) {
-        this.whoIsOpen[program.program_code].instances[instance.year_started] = false;
+      if (program.instances) {
+        for (let instance of program.instances) {
+          this.whoIsOpen[program.program_code].instances[instance.year_started] = false;
+        }
       }
     }
   }
