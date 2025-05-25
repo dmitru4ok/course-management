@@ -3,7 +3,10 @@
 
     <div>
       <label for="program_code" class="block font-medium mb-1">Select Study Program</label>
-      <select id="program_code" formControlName="program_code" class="w-full border px-4 py-2 rounded-md shadow">
+      <select [ngClass]="{
+        'border-red-500': instantiateForm.get('program_code')?.invalid && (instantiateForm.get('program_code')?.dirty || instantiateForm.get('program_code')?.touched),
+        }"
+        id="program_code" formControlName="program_code" class="w-full border px-4 py-2 rounded-md shadow">
         <option value="" disabled selected>Select a program</option>
         @for (prog of studyPrograms; track $index) {
           <option [value]="prog.program_code">
@@ -15,7 +18,10 @@
 
     <div>
       <label for="year_started" class="block font-medium mb-1">Year Started</label>
-      <input id="year_started" min="1991" step="1" type="number" formControlName="year_started" class="w-full border px-4 py-2 rounded-md shadow" />
+      <input [ngClass]="{'border-red-500': instantiateForm.get('year_started')?.invalid && (instantiateForm.get('year_started')?.dirty || instantiateForm.get('year_started')?.touched)}"
+              id="year_started" min="1990" step="1"
+              type="number" formControlName="year_started"
+              class="w-full border px-4 py-2 rounded-md shadow" />
     </div>
 
     <div>
@@ -35,7 +41,10 @@
 
       <div>
         <label for="copy_program_code" class="block font-medium mb-1">Source Study Program</label>
-        <select id="copy_program_code" formControlName="copy_program_code" class="w-full border px-4 py-2 rounded-md shadow">
+        <select
+        [ngClass]="{'border-red-500': instantiateForm.get('copy_program_code')?.invalid && (instantiateForm.get('copy_program_code')?.dirty || instantiateForm.get('copy_program_code')?.touched)}"
+        id="copy_program_code" formControlName="copy_program_code"
+        class="w-full border px-4 py-2 rounded-md shadow">
           <option value="" disabled selected>Select a source program</option>
           @for (prog of studyPrograms; track $index) {
              <option [value]="prog.program_code">
@@ -47,7 +56,9 @@
 
       <div>
         <label for="copy_program_year" class="block font-medium mb-1">Source Year</label>
-        <select id="copy_program_year" formControlName="copy_program_year" class="w-full border px-4 py-2 rounded-md shadow">
+        <select
+          [ngClass]="{'border-red-500': instantiateForm.get('copy_program_year')?.invalid && (instantiateForm.get('copy_program_year')?.dirty || instantiateForm.get('copy_program_year')?.touched)}"
+          id="copy_program_year" formControlName="copy_program_year" class="w-full border px-4 py-2 rounded-md shadow">
           <option value="" disabled selected>Select a source program</option>
           @for (year of years_available; track $index) {
             <option [value]="year"> {{ year }}</option>
@@ -58,7 +69,7 @@
     }
 
     <div>
-      <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition">
+      <button [ngClass]="{'opacity-[0.5]': instantiateForm.invalid}" [disabled]="instantiateForm.invalid" type="submit" class="bg-blue-600 cursor-pointer text-white px-6 py-2 rounded-md hover:bg-blue-700 transition">
         Instantiate Program
       </button>
     </div>
