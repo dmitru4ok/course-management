@@ -53,4 +53,8 @@ export class DataService {
   public getStudyProgramInstances() {
     return this.http.get<StudyProgramInstance[]>(`${this.APIURL}/study_programs`);
   }
+
+  public postInstantiateStudyProgram(data: unknown) {
+    return this.http.post(`${this.APIURL}/study_programs/instances`, data);
+  }
 }
