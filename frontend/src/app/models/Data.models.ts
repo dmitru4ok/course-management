@@ -36,5 +36,5 @@ export type StudyProgram = {
   program_type: StudyProgramType,
   faculty_code: string,
   is_valid: boolean,
-  instances: Array<StudyProgramInstance>
+  instances?: Array<StudyProgramInstance>
 }

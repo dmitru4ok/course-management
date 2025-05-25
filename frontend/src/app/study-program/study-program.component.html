@@ -14,12 +14,13 @@
       <a
         type="button"
         [routerLink]="['/admin', 'study-programs', 'instantiate']"
+        [queryParams]="{ 'code': program.program_code }"
 
         class="text-sm px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow-sm transition"
         (click)="$event.stopPropagation()">
        Instantiate
       </a>
-      <svg [class.rotate-180]="whoIsOpen[program.program_code].open" [ngClass]="{'invisible':!program.instances.length }" class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <svg [class.rotate-180]="whoIsOpen[program.program_code].open" [ngClass]="{'invisible':!program.instances?.length }" class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
       </svg>
     </div>
@@ -60,7 +61,6 @@
           }
         </div>
         }
-
       </div>
       }
     </div>
