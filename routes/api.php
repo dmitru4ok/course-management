@@ -53,6 +53,7 @@ Route::middleware('auth:api')->group(function() {
 
     Route::controller(StudyProgramController::class)->group(function() { // testing
         Route::get('/study_programs', 'index');
+        Route::get('/study_programs_instances', 'index_with_instances');
         Route::get('/study_programs/instances', 'index_instances');
         Route::get('/study_programs/{code}', 'show_study_program_by_id');
         Route::get('/study_programs/{code}/instances', 'show_by_code_instances');

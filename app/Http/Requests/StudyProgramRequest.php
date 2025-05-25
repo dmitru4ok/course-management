@@ -41,11 +41,13 @@ class StudyProgramRequest extends FormRequest
                 ],
                 'perform_deep_copy' => 'required|boolean',
                 'copy_program_code' => [
+                    'nullable',
                     'required_if:perform_deep_copy,true',
                     'string',
                     'size:6'
                 ],
                 'copy_program_year' => [
+                    'nullable',
                     'required_if:perform_deep_copy,true',
                     'integer',
                     'digits:4',
