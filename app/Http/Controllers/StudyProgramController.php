@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StudyProgramRequest;
+use App\Models\Semester;
 use App\Models\StudyProgramInstance;
 use App\Models\StudyProgram;
+use DateTime;
 use Illuminate\Http\Request;
 
 class StudyProgramController extends Controller
@@ -69,16 +71,28 @@ class StudyProgramController extends Controller
     public function create_study_program_instance(StudyProgramRequest $request) {
         $data = $request->validated();
         $new_instance = StudyProgramInstance::create($data);
-        if ($data['perform_deep_copy']) {
+        if (!is_null($data['perform_deep_copy']) && $data['perform_deep_copy']) {
+            $old_semesters  = StudyProgramInstance::where('program_code', $data['copy_program_code'])
+                ->where('year_started', $data['copy_program_year'])->first()->semesters;
+                $new_semesters = $old_semesters->map(function ($semester) use ($data) {
+                    return [
+                        'program_code' => $data['program_code'],
+                        'year_started' => $data['year_started'],
+                        'sem_no' => $semester->sem_no,
+                        'is_valid' => $semester->is_valid,
+                        'date_from' => new DateTime($semester->date_from)->modify('+1 year')->format('Y-m-d'),
+                        'date_to' =>  new DateTime($semester->date_to)->modify('+1 year')->format('Y-m-d'),
+                    ];
+                })->toArray();
+                dd($old_semesters->toArray(), Semester::insert($new_semesters));
             // TODO
-            // get semesters
             // for each semester get compulsory courses
             // instert semesters and their courses for the new instance
 
             // use Model::insert() for bulk insert
         }
        
-        return $new_instance;
+        // return $new_instance;
     }
 
     public function update(Request $request, string $code)
