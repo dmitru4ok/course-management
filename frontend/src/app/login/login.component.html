@@ -2,6 +2,19 @@
   <div class="w-full max-w-sm bg-white p-6 rounded-xl shadow-md">
     <h2 class="text-2xl font-semibold text-center text-gray-800 mb-6">Login</h2>
 
+      @if (!loginForm.pristine && !loginForm.valid) {
+        @if (loginForm.get('email')?.errors?.['required']) {
+          <p class="text-sm bg-red-200 p-3 rounded-md mb-5 text-red-800">Email is required</p>
+        } @else if (loginForm.get('email')?.errors?.['email']) {
+          <p class="text-sm bg-red-200 p-3 rounded-md mb-5 text-red-800">Email is invalid</p>
+        } @else if (loginForm.get('password')?.errors?.['required']) {
+          <p class="text-sm bg-red-200 p-3 rounded-md mb-5 text-red-800">Password is required</p>
+        }
+      }
+
+      @if (loginError) {
+        <p class="text-sm bg-red-200 p-3 rounded-md mb-5 text-red-800">{{loginError}}</p>
+      }
     <form id="loginForm" [formGroup]="loginForm" class="space-y-4" (ngSubmit)="handleLogin()">
       <div>
         <label for="email-input" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
@@ -23,15 +36,13 @@
         />
       </div>
 
-      @if (!loginForm.pristine && !loginForm.valid) {
-        <p class="text-sm text-red-500">Please fill out both fields correctly.</p>
-      }
+
 
       <button
         type="submit"
         form="loginForm"
         [disabled]="!loginForm.valid"
-        class="w-full bg-blue-600 text-white font-medium py-2 px-4 rounded-md hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+        class="w-full cursor-pointer bg-blue-600 text-white font-medium py-2 px-4 rounded-md hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
       >
         Send
       </button>
