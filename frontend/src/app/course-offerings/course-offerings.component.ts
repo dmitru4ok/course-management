@@ -51,5 +51,12 @@ export class CourseOfferingsComponent {
 
   addOffering() {
     console.log(this.offeringForm.value);
+    this.data.postCourseOfferings(this.offeringForm.value).pipe(
+      switchMap(() => {
+        return this.data.getCourseOfferings();
+      })
+    ).subscribe(data => {
+      this.courses = data;
+    });
   }
 }
