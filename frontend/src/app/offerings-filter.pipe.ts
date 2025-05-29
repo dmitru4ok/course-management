@@ -8,7 +8,7 @@ import { CourseOfferingNested } from './models/Data.models';
 })
 export class OfferingsFilterPipe implements PipeTransform {
 
-  transform(courses: CourseOfferingNested[], filter: { name: string; hasSyllabus: string }): any[] {
+  transform(courses: CourseOfferingNested[], filter: { name: string; hasSyllabus: string }): CourseOfferingNested[] {
     if (!courses) return [];
 
     const nameFilter = filter.name.toLowerCase().trim() || '';

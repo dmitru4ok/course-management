@@ -41,11 +41,14 @@ export type StudyProgram = {
   instances?: Array<StudyProgramInstance>
 }
 
-export type CourseOfferingNested = {
+export type CourseOffering = {
   offering_id: number,
   classroom: number,
   building: string,
   course_code: number,
+}
+
+export type CourseOfferingNested = CourseOffering & {
   course_blueprint: CourseBluepint
   offering_professors: Array<User & {pivot: {prof_id: number, offering_id: number}}>
 }
