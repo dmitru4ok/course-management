@@ -1,0 +1,150 @@
+<div class="flex h-[calc(100vh-4rem)]">
+  <div class="w-1/2 overflow-y-auto border-r border-gray-200 p-4 space-y-6 bg-gray-50">
+    <div class="container mx-auto px-4 py-6 space-y-8">
+
+      <div class="space-y-2">
+        <h2 class="text-lg font-semibold text-gray-700">Filter Offerings</h2>
+        <input
+          type="text"
+          name="filter1"
+          class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Search by course name..."
+          [(ngModel)]="filter.name"
+        />
+        <select
+          [(ngModel)]="filter.hasSyllabus"
+         name="filter2"
+          class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <option value="" selected>All</option>
+          <option value="1">Yes</option>
+          <option value="0">No</option>
+        </select>
+      </div>
+
+      <div class="pt-6 border-t border-gray-300 space-y-4">
+        <h2 class="text-lg font-semibold text-gray-700">Add Course Offering</h2>
+        <form [formGroup]="offeringForm" (ngSubmit)="addOffering()" class="space-y-3">
+          <div>
+            <label for="course_code" class="block text-sm font-medium text-gray-600">Course Code</label>
+            <select
+              id="course_code"
+              formControlName="course_code"
+              class="w-full border border-gray-300 rounded-md px-3 py-2">
+              <option value="" selected></option>
+              @for (item of blueprints; track $index) {
+                <option [value]="item.course_code"> {{item.course_name}} ({{item.faculty_code}}) - {{item.credit_weight}} ECTS</option>
+              }
+            </select>
+            @if (offeringForm.get('course_code')?.invalid && offeringForm.get('course_code')?.touched) {
+            <div class="text-sm text-red-500">
+              Course code is required.
+            </div>
+    }
+
+  </div>
+
+  <div>
+    <label for="classroom" class="block text-sm font-medium text-gray-600">Classroom</label>
+    <input
+      id="classroom"
+      type="number"
+      min="0"
+      step="1"
+      formControlName="classroom"
+      class="w-full border border-gray-300 rounded-md px-3 py-2"
+    />
+    @if (offeringForm.get('classroom')?.invalid && offeringForm.get('classroom')?.touched) {
+      <div class="text-sm text-red-500">
+        Classroom is required.
+      </div>
+    }
+  </div>
+
+  <div>
+    <label for="building" class="block text-sm font-medium text-gray-600">Building</label>
+    <input
+      id="building"
+      type="text"
+      formControlName="building"
+      class="w-full border border-gray-300 rounded-md px-3 py-2"
+    />
+    @if (offeringForm.get('building')?.invalid && offeringForm.get('building')?.touched) {
+      <div class="text-sm text-red-500">
+        Building is required.
+      </div>
+    }
+  </div>
+
+  <button
+    type="submit"
+    [disabled]="offeringForm.invalid"
+    class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:opacity-50 shadow"
+  >
+    Add Offering
+  </button>
+</form>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="w-1/2 overflow-y-auto p-4 space-y-4 bg-white">
+    <div class="container mx-auto px-4 py-6 space-y-6">
+      <h1 class="text-2xl font-bold text-gray-800 mb-4">Course Offerings</h1>
+      @for (offering of courses | offeringsFilter:filter; track offering.offering_id) {
+       <div class="bg-white border border-gray-200 rounded-md shadow p-6 space-y-4">
+          <div class="flex justify-between items-start">
+            <div>
+              @if(offering.course_blueprint.has_syllabus_pdf) {
+                <h2 onkeypress="" (click)="openSyllabus(offering.course_blueprint.course_code)" class="text-xl font-semibold text-blue-800 hover:underline decoration-blue-800">
+                  {{ offering.course_blueprint.course_name }} ({{ offering.course_blueprint.course_code }})
+                </h2>
+              } @else {
+                 <h2 class="text-xl font-semibold text-blue-800">
+                  {{ offering.course_blueprint.course_name }} ({{ offering.course_blueprint.course_code }})
+                </h2>
+              }
+
+              <p class="text-sm text-gray-600">
+                Credits: {{ offering.course_blueprint.credit_weight }} |
+                Faculty: {{ offering.course_blueprint.faculty_code }} |
+                Valid: {{ offering.course_blueprint.is_valid ? 'Yes' : 'No' }}
+              </p>
+              @if (offering.course_blueprint.has_syllabus_pdf) {
+                <p class="text-xs text-green-700 mt-1">Syllabus available</p>
+              }
+        </div>
+        <div class="text-sm text-gray-700">
+          <p class="font-medium">Classroom:</p>
+          <p>{{ offering.building }} {{ offering.classroom }}</p>
+        </div>
+    </div>
+    <div class="border-t pt-4">
+        <h3 class="text-sm font-semibold text-gray-700 mb-2">Professors</h3>
+          @if (offering.offering_professors.length === 0) {
+            <p class="text-sm text-gray-500 italic">No professors assigned yet.</p>
+          } @else {
+          <ul class="list-disc list-inside text-sm text-gray-800 space-y-1">
+            @for (prof of offering.offering_professors; track prof.user_id) {
+              <li>
+                {{ prof.name }} {{ prof.surname }}
+                <span class="text-gray-500">({{ prof.email }})</span>
+              </li>
+            }
+          </ul>
+          }
+      <div class="flex justify-end pt-2">
+        <button
+        (click)="1"
+        class="p-3 text-sm text-white bg-red-600 hover:bg-red-700 rounded-sm shadow">
+          Remove Offering
+      </button>
+    </div>
+    </div>
+  </div>
+      }
+    </div>
+  </div>
+</div>
+
+

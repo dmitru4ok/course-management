@@ -8,6 +8,7 @@ import { redirectGuard } from './guards/redirect.guard';
 import { CourseComponent } from './course/course_blueprint.component';
 import { StudyProgramComponent } from './study-program/study-program.component';
 import { InstantiateStudyProgramComponent } from './instantiate-study-program/instantiate-study-program.component';
+import { CourseOfferingsComponent } from './course-offerings/course-offerings.component';
 
 export const routes: Routes = [
 
@@ -17,6 +18,7 @@ export const routes: Routes = [
     canActivateChild: [isAllowedRoleGuard([UserRole.ADMIN])], children: [
       {path: '', pathMatch: 'full', redirectTo: 'courses'},
       {path: 'courses', component: CourseComponent},
+      {path: 'course-offerings', component: CourseOfferingsComponent},
       {path: 'register', component: RegisterComponent},
       {path: 'study-programs', children: [
         {path: '', pathMatch: 'full', component: StudyProgramComponent},

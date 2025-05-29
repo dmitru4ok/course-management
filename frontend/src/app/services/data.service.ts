@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
-import { CourseBluepint, Faculty, StudyProgram, StudyProgramInstance } from '../models/Data.models';
+import { CourseBluepint, CourseOfferingNested, Faculty, StudyProgram, StudyProgramInstance } from '../models/Data.models';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -56,5 +56,9 @@ export class DataService {
 
   public postInstantiateStudyProgram(data: unknown) {
     return this.http.post(`${this.APIURL}/study_programs/instances`, data);
+  }
+
+  public getCourseOfferings() {
+    return this.http.get<CourseOfferingNested[]>(`${this.APIURL}/course_offerings`);
   }
 }

@@ -29,8 +29,6 @@ export class LoginComponent {
         if(errValue.status === 401) {
           this.loginError = 'Invalid credentials';
         }
-
-
         console.log(this.loginError);
       },
       next: (value) => {
@@ -38,7 +36,7 @@ export class LoginComponent {
         if (value.user.role === UserRole.STUDENT) {
           path = ['my-courses'];
         } else if (value.user.role === UserRole.ADMIN) {
-          path = ['admin', 'register'];
+          path = ['/admin', 'courses'];
         } else if (value.user.role === UserRole.PROFESSOR) {
           path = ['professor', 'courses'];
         } else {

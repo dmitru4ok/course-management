@@ -1,3 +1,5 @@
+import { User } from "./Auth.models"
+
 export type CourseBluepint = {
   course_code: number,
   course_name: string,
@@ -37,4 +39,13 @@ export type StudyProgram = {
   faculty_code: string,
   is_valid: boolean,
   instances?: Array<StudyProgramInstance>
+}
+
+export type CourseOfferingNested = {
+  offering_id: number,
+  classroom: number,
+  building: string,
+  course_code: number,
+  course_blueprint: CourseBluepint
+  offering_professors: Array<User & {pivot: {prof_id: number, offering_id: number}}>
 }
