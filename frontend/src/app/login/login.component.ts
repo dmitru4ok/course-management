@@ -13,6 +13,7 @@ import { Router, RouterModule } from '@angular/router';
 })
 export class LoginComponent {
   protected loginForm: FormGroup;
+  protected loginError: string | null = null;
   constructor(private readonly auth: AuthService, private readonly router: Router) {
     this.loginForm = new FormGroup({
       'email': new FormControl(null, {validators: [Validators.required, Validators.email]}),
@@ -21,11 +22,16 @@ export class LoginComponent {
   }
 
   handleLogin() {
+    this.loginError = null;
     const loginCeredentials: LoginForm = this.loginForm.value;
-
     this.auth.login(loginCeredentials).subscribe({
       error: (errValue) => {
-        console.log(errValue);
+        if(errValue.status === 401) {
+          this.loginError = 'Invalid credentials';
+        }
+
+
+        console.log(this.loginError);
       },
       next: (value) => {
         let path: Array<string>;
