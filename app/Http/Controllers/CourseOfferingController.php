@@ -27,30 +27,13 @@ class CourseOfferingController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(CourseOffering $courseOffering)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, CourseOffering $courseOffering)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(CourseOffering $courseOffering)
-    {
-        //
+        $data = $request->validate([
+            'course_code' => 'required|exists:course_offerings,course_code',
+            'building' => 'required|in:A,B,C,D',
+            'classroom' => 'required|integer'
+        ]);
+        // dd($data);
+        return CourseOffering::create($data);
+        
     }
 }
