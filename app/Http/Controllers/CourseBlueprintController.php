@@ -3,16 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\CourseBlueprint;
-use Illuminate\Http\Request;
 use App\Http\Requests\CourseBlueprintRequest;
-use League\CommonMark\Extension\CommonMark\Node\Inline\Code;
 use Illuminate\Support\Facades\Storage;
 
 class CourseBlueprintController extends Controller
 {
     public function index()
     {
-        return CourseBlueprint::all();
+        return CourseBlueprint::orderBy('course_name', 'asc')->get();
     }
 
     public function store(CourseBlueprintRequest $request)

@@ -28,7 +28,7 @@ class CourseOfferingController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'course_code' => 'required|exists:course_offerings,course_code',
+            'course_code' => 'required|exists:course_blueprints,course_code',
             'building' => 'required|in:A,B,C,D',
             'classroom' => 'required|integer'
         ]);
