@@ -26,7 +26,6 @@ class StudyProgramTest extends TestCase
                 'faculty_code',
                 'program_type',
                 'is_valid',
-                'instances'
             ]
         ]);
     }

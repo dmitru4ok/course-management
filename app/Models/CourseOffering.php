@@ -24,7 +24,7 @@ class CourseOffering extends Model
     public $incrementing = true;
 
      
-    public function offeringProfessor(): BelongsToMany {
+    public function offeringProfessors(): BelongsToMany {
         return $this->belongsToMany(
             \App\Models\User::class,
             'teaches',
